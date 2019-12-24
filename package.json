@@ -1,39 +1,45 @@
 {
-  "name": "todo",
+  "name": "todo-extension",
   "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "3.3.0",
-    "typescript": "~3.7.2"
-  },
+  "description": "Chrome Todo Extension",
+  "main": "src/index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "rollup -c -w",
+    "build": "rollup -c"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SeonHyungJo/Todo-Extension.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [
+    "todo",
+    "extension"
+  ],
+  "author": "sNyung",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SeonHyungJo/Todo-Extension/issues"
+  },
+  "homepage": "https://github.com/SeonHyungJo/Todo-Extension#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@rollup/plugin-commonjs": "^11.0.0",
+    "@rollup/plugin-node-resolve": "^6.0.0",
+    "@rollup/plugin-typescript": "^2.0.1",
+    "rollup": "^1.27.14",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-cleaner": "^1.0.0",
+    "rollup-plugin-copy": "^3.1.0",
+    "rollup-plugin-generate-html-template": "^1.6.0",
+    "rollup-plugin-sass": "^1.2.2",
+    "rollup-plugin-uglify": "^6.0.4",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.4"
+  },
+  "dependencies": {
+    "redux-zero": "^5.1.1"
   }
 }

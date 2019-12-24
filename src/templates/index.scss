@@ -1,0 +1,11 @@
+:root{
+  --main-bg-color: #fff;
+  --main-width: 300px;
+  --main-height: 300px;
+}
+
+body{
+  background: var(--main-bg-color);
+  width: var(--main-width);
+  height: var(--main-height);
+}
