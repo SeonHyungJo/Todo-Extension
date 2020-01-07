@@ -20,6 +20,7 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "ignorePatterns": ["dist/", "node_modules/", "webpack.*.js"],
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
   }
 }
