@@ -5,7 +5,8 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended"
+    "plugin:@typescript-eslint/eslint-recommended",
+    "prettier"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -16,30 +17,9 @@
     "ecmaVersion": 2019,
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint"
-  ],
-  "ignorePatterns": [
-    "dist/",
-    "node_modules/",
-    "webpack.*.js"
-  ],
+  "plugins": ["@typescript-eslint", "prettier"],
+  "ignorePatterns": ["dist/", "node_modules/", "webpack.*.js"],
   "rules": {
-    "indent": [
-      "error",
-      "tab"
-    ],
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ]
+    "prettier/prettier": "error"
   }
 }

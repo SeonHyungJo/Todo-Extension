@@ -1,51 +1,51 @@
-const webpack = require("webpack");
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
-  entry: "./src/index.ts",
+  entry: './src/index.ts',
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "[name].[contenthash].js"
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[contenthash].js',
   },
   module: {
     rules: [
       {
         test: /\.ts(x)?$/,
-        use: ["awesome-typescript-loader"],
-        exclude: /node_modules/
+        use: ['awesome-typescript-loader'],
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.png$/,
         use: [
           {
-            loader: "url-loader",
+            loader: 'url-loader',
             options: {
-              mimetype: "image/png"
-            }
-          }
-        ]
+              mimetype: 'image/png',
+            },
+          },
+        ],
       },
       {
         test: /\.svg$/,
-        use: "file-loader"
-      }
-    ]
+        use: 'file-loader',
+      },
+    ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"]
+    extensions: ['.tsx', '.ts', '.js'],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: require("html-webpack-template"),
+      template: require('html-webpack-template'),
       inject: false,
-      appMountId: "app"
-    })
-  ]
+      appMountId: 'app',
+    }),
+  ],
   // optimization: {
   //   runtimeChunk: "single",
   //   splitChunks: {
