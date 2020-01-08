@@ -1,15 +1,15 @@
 export interface DataParams {
-  id: number;
   text: string;
-  done: boolean;
 }
 
 export interface TestState {
   text: string;
+  complete?: string;
 }
 
 /* type */
 export const TEST = 'TEST';
+export const COMPLETE = 'COMPLETE';
 
 export interface TestAction {
   type: typeof TEST;
@@ -17,14 +17,14 @@ export interface TestAction {
 }
 
 export interface CreateAction {
-  type: typeof TEST;
+  type: typeof COMPLETE;
   payload: DataParams;
 }
 
 export type ActionTypes = TestAction | CreateAction;
 
 /* action */
-function test(text: string) {
+function test(text: string): TestAction {
   return {
     type: TEST,
     payload: {
@@ -33,8 +33,18 @@ function test(text: string) {
   };
 }
 
+function complete(): CreateAction {
+  return {
+    type: COMPLETE,
+    payload: {
+      text: 'complete',
+    },
+  };
+}
+
 export const actionCreators = {
   test,
+  complete,
 };
 
 /* reducers */
@@ -50,6 +60,11 @@ export function testReducer(
     case TEST:
       return {
         text: action.payload.text,
+      };
+    case COMPLETE:
+      return {
+        ...state,
+        complete: action.payload.text,
       };
     default:
       return state;

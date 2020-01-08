@@ -42,6 +42,7 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-observable": "^1.2.0"
   }
 }
