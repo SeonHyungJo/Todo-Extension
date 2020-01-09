@@ -10,8 +10,7 @@
     "build:prod": "npm run clean && webpack -p --mode production",
     "clean": "rimraf dist/",
     "lint": "eslint . --ext .ts",
-    "lint-staged": "lint-staged",
-    "precommit": "lint-staged && npm run test"
+    "precommit": "lint-staged"
   },
   "husky": {
     "hooks": {
@@ -21,6 +20,7 @@
   "lint-staged": {
     "*.ts": [
       "npm run lint",
+      "npm run test",
       "git add"
     ]
   },
