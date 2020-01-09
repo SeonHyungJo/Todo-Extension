@@ -5,8 +5,7 @@ const config = {
       '^.+\\.ts?$': 'ts-jest',
     },
     testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.ts$',
-    moduleFileExtensions: ['ts', 'js', 'json', 'node'],
-    testPathIgnorePatterns: ['<rootDir>/node_modules'],
+    moduleFileExtensions: ['ts', 'js'],
   },
 };
 

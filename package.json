@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --passWithNoTests",
+    "test": "jest",
     "start": "webpack-dev-server --open",
     "build:dev": "npm run clean && webpack -d --mode development",
     "build:prod": "npm run clean && webpack -p --mode production",
