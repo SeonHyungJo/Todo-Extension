@@ -8,7 +8,7 @@ export interface TestState {
 }
 
 // type
-export const TEST = 'TEST';
+export const TEST = 'main/TEST';
 
 interface TestAction {
   type: typeof TEST;
@@ -48,6 +48,6 @@ export function testReducer(
         text: action.payload.text,
       };
     default:
-      return { text: '' };
+      return state;
   }
 }
