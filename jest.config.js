@@ -1,6 +1,6 @@
 const config = {
   jest: {
-    roots: ['<rootDir>/test'],
+    roots: ['<rootDir>/__test__'],
     transform: {
       '^.+\\.ts?$': 'ts-jest',
     },
