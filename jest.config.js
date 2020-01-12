@@ -1,12 +1,12 @@
 const config = {
-  jest: {
-    roots: ['<rootDir>/__test__'],
-    transform: {
-      '^.+\\.ts?$': 'ts-jest',
-    },
-    testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.ts$',
-    moduleFileExtensions: ['ts', 'js'],
-  },
+  rootDir: '.',
+  preset: 'ts-jest',
+  roots: ['<rootDir>/__tests__'],
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.ts$',
+  moduleFileExtensions: ['ts', 'js'],
+  testEnvironment: 'node',
+  collectCoverage: true,
+  colors: true,
 };
 
 module.exports = config;
