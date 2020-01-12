@@ -5,8 +5,14 @@ const config = {
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.ts$',
   moduleFileExtensions: ['ts', 'js'],
   testEnvironment: 'node',
-  collectCoverage: true,
-  colors: true,
+  coverageThreshold: {
+    global: {
+      branches: 50,
+      functions: 50,
+      lines: 50,
+      statements: 50
+    }
+  }
 };
 
 module.exports = config;
