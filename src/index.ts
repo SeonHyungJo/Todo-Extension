@@ -1,4 +1,5 @@
-import { getValue, getTestValue } from '@components/test';
+export const indexFunction = () => {
+  return 'index';
+};
 
-console.log(getValue());
-console.log(getTestValue(true));
+console.log(indexFunction());

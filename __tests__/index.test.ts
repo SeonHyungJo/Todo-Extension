@@ -1,18 +1,8 @@
-import { getValue, getTestValue } from '@components/test';
-test('getValue Testing', () => {
-  const expectValue: string = 'test';
-  const resultValue: string = getValue();
+import { indexFunction } from '../src/index';
+
+test('indexFunction Testing', () => {
+  const expectValue: string = 'index';
+  const resultValue: string = indexFunction();
 
   expect(expectValue).toBe(resultValue);
-});
-
-test('getTestValue Testing', () => {
-  const expectTrueValue: string = 'TrueValue';
-  const expectFalseValue: string = 'FalseValue';
-
-  const resultTrueValue: string = getTestValue(true);
-  const resultFalseValue: string = getTestValue(false);
-
-  expect(expectTrueValue).toBe(resultTrueValue);
-  expect(expectFalseValue).toBe(resultFalseValue);
 });
