@@ -1,4 +1,4 @@
-import { indexFunction } from '../src/index';
+import { indexFunction } from '@src/index';
 
 test('indexFunction Testing', () => {
   const expectValue: string = 'index';

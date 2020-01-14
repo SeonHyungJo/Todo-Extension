@@ -6,9 +6,14 @@ const config = {
   moduleFileExtensions: ['ts', 'js'],
   testEnvironment: 'node',
   moduleNameMapper: {
+    '@src/(.*)$': '<rootDir>/src/$1',
     '@components/(.*)$': '<rootDir>/src/components/$1',
+    '@githubApi/(.*)$': '<rootDir>/src/github-api/$1',
+    '@redux/(.*)$': '<rootDir>/src/redux/$1',
+    '@model/(.*)$': '<rootDir>/src/model/$1',
+    '@util/(.*)$': '<rootDir>/src/util/$1',
   },
-  collectCoverage: true,
+  collectCoverage: false,
   collectCoverageFrom: ['**/*.{ts,}', '!**/node_modules/**', '!**/dist/**'],
   coverageThreshold: {
     global: {

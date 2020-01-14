@@ -12,6 +12,7 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
+      "@src/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@githubApi/*": ["src/github-Api/*"],
       "@redux/*": ["src/redux/*"],

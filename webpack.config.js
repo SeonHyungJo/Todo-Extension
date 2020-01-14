@@ -40,6 +40,7 @@ const config = {
   resolve: {
     extensions: ['.ts'],
     alias: {
+      '@src': path.resolve(__dirname, 'src'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@githubApi': path.resolve(__dirname, 'src/github-api'),
       '@redux': path.resolve(__dirname, 'src/redux'),
