@@ -8,7 +8,17 @@
     "module": "es6",
     "moduleResolution": "node",
     "target": "es5",
-    "allowJs": true
+    "allowJs": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@githubApi/*": ["src/github-Api/*"],
+      "@redux/*": ["src/redux/*"],
+      "@model/*": ["src/model/*"],
+      "@util/*": ["src/util/*"]
+    }
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "__test__/**/*"]
 }

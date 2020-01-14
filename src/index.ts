@@ -1,1 +1,5 @@
-console.log('sdfsdfsfsd');
+export const indexFunction = () => {
+  return 'index';
+};
+
+console.log(indexFunction());
