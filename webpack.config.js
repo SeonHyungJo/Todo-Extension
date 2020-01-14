@@ -38,11 +38,13 @@ const config = {
     ],
   },
   resolve: {
-    root: __dirname,
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.ts'],
     alias: {
-      '@': path.resolve(__dirname, 'src'),
       '@components': path.resolve(__dirname, 'src/components'),
+      '@githubApi': path.resolve(__dirname, 'src/github-api'),
+      '@redux': path.resolve(__dirname, 'src/redux'),
+      '@model': path.resolve(__dirname, 'src/model'),
+      '@util': path.resolve(__dirname, 'src/util'),
     },
   },
   plugins: [
@@ -54,7 +56,7 @@ const config = {
     ]),
     new HtmlWebpackPlugin({
       template: 'public/index.html',
-      inject: false,
+      inject: true,
       appMountId: 'app',
     }),
   ],

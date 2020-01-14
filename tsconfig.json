@@ -10,9 +10,9 @@
     "target": "es5",
     "allowJs": true,
     "esModuleInterop": true,
-    "baseUrl": "src" /* Base directory to resolve non-absolute module names. */,
+    "baseUrl": "./src" /* Base directory to resolve non-absolute module names. */,
     "paths": {
-      "@components/*": ["components/*"]
+      "@*": ["*"]
     }
   },
   "include": ["./src/**/*", "__test__/**/*"]
