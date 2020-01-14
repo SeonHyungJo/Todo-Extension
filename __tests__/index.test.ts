@@ -1,4 +1,4 @@
-import { getValue, getTestValue } from '../src/components/test';
+import { getValue, getTestValue } from '@components/test';
 test('getValue Testing', () => {
   const expectValue: string = 'test';
   const resultValue: string = getValue();
