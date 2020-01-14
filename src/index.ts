@@ -1,5 +1,5 @@
-import { configureStore } from './redux';
+export const indexFunction = () => {
+  return 'index';
+};
 
-const store = configureStore();
-
-console.log(store.getState());
+console.log(indexFunction());
