@@ -1,3 +1,4 @@
 //todo export
-export {} from './issue';
-export {} from './label';
+import * as issueAPI from '@githubApi/issue';
+
+export { issueAPI };
