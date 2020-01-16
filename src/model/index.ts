@@ -23,7 +23,20 @@ interface Label {
 interface Config {
   owner: string;
   repoName: string;
-  token: string;
+  token?: string;
 }
 
-export { Todo, Item, Label, Config };
+interface UpdateIssueParams {
+  repositoryId: string;
+  body: string;
+  title: string;
+}
+
+interface CreateLabelParams {
+  repositoryId: string;
+  name: string;
+  color: string;
+  description?: string;
+}
+
+export { Todo, Item, Label, Config, UpdateIssueParams, CreateLabelParams };
