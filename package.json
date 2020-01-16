@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --colors",
+    "test": "jest --colors --passWithNoTests",
     "test:coverage": "jest --collectCoverage --no-cache",
     "start": "webpack-dev-server --open",
     "build:dev": "npm run clean && webpack -d --mode development",
