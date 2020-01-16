@@ -1,11 +1,12 @@
+import { Config } from '@model/index';
+
 //todo Create
 const createIssueQuery = (
-  repositoryId: String,
-  title: String,
-  body: String,
+  repositoryId: string,
+  title: string,
+  body: string,
 ) => {
-  return;
-  `
+  return `
   mutation {
     __typename
     createIssue(input: {repositoryId: "${repositoryId}", title: "${title}", body: "${body}"}) {
@@ -20,7 +21,7 @@ const createIssueQuery = (
 };
 
 //todo Read
-const getIssueQuery = (repoName: String, owner: String) => {
+const getIssueQuery = ({ repoName, owner }: Config) => {
   return `
   query {
     repository(name: "${repoName}", owner: "${owner}") {
@@ -48,7 +49,24 @@ const getIssueQuery = (repoName: String, owner: String) => {
 };
 
 //todo Update
-const updateIssueQuery = () => {};
+const updateIssueQuery = (
+  repositoryId: string,
+  title: string,
+  body: string,
+) => {
+  return `
+  mutation {
+    updateIssue(input: {id: "MDU6SXNzdWU1NDg3MzM4MjM", body: "${body}"}) {
+      issue {
+        updatedAt
+        title
+        id
+        bodyHTML
+      }
+    }
+  }
+  `;
+};
 
 //todo Delete
 const deleteIssueQuery = () => {};
