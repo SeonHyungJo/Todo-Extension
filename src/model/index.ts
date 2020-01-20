@@ -1,42 +1,31 @@
-interface Todo {
-  itemList: Array<Item>;
+export type repositoryId = string;
+export type token = string;
+export type labelId = string;
+export type todoId = string;
+
+export interface Label {
+  ID: labelId;
+  title: string;
+  color: string;
+  repositoryId?: repositoryId;
 }
 
-interface InputData {
+export type LabelList = Array<Label>;
+
+export interface Todo {
+  repositoryId: repositoryId;
   title: string;
   body: string;
-  label: Array<Label>;
+  ID?: todoId;
+  modified?: boolean;
+  labelList?: Array<Label>;
 }
 
-interface Item {
-  id: string;
-  sync: boolean;
-  inputData: InputData;
-}
+export type TodoList = Array<Todo>;
 
-interface Label {
-  id: string;
-  color: string;
-  name: string;
-}
-
-interface Config {
+export interface Config {
+  token: token;
+  repositoryId: repositoryId;
   owner: string;
-  repoName: string;
-  token?: string;
+  repositoryName: string;
 }
-
-interface UpdateIssueParams {
-  repositoryId: string;
-  body: string;
-  title: string;
-}
-
-interface CreateLabelParams {
-  repositoryId: string;
-  name: string;
-  color: string;
-  description?: string;
-}
-
-export { Todo, Item, Label, Config, UpdateIssueParams, CreateLabelParams };

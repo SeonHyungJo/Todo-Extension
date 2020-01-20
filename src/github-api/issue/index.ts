@@ -1,11 +1,7 @@
-import { Config, UpdateIssueParams } from '@model/index';
+import { Config, Todo } from '@model/index';
 
 //todo Create
-const createIssueQuery = (
-  repositoryId: string,
-  title: string,
-  body: string,
-): string => {
+const createIssueQuery = ({ repositoryId, title, body }: Todo): string => {
   return `
   mutation {
     __typename
@@ -21,10 +17,15 @@ const createIssueQuery = (
 };
 
 //todo Read
-const getIssueQuery = ({ repoName, owner }: Config): string => {
+const getIssueQuery = ({
+  token,
+  repositoryId,
+  owner,
+  repositoryName,
+}: Config): string => {
   return `
   query {
-    repository(name: "${repoName}", owner: "${owner}") {
+    repository(name: "${repositoryName}", owner: "${owner}") {
       issues(first: 10, states: OPEN) {
         edges {
           node {
@@ -49,11 +50,7 @@ const getIssueQuery = ({ repoName, owner }: Config): string => {
 };
 
 //todo Update
-const updateIssueQuery = ({
-  repositoryId,
-  body,
-  title,
-}: UpdateIssueParams): string => {
+const updateIssueQuery = ({ repositoryId, title, body }: Todo): string => {
   return `
   mutation {
     updateIssue(input: {id: "${repositoryId}", body: "${body}", title: "${title}}) {
@@ -69,11 +66,11 @@ const updateIssueQuery = ({
 };
 
 //todo Delete
-const deleteIssueQuery = (issueId: string): string => {
+const deleteIssueQuery = (ID: string): string => {
   return `
   mutation MyMutation {
     __typename
-    closeIssue(input: {issueId: "${issueId}"}) {
+    closeIssue(input: {issueId: "${ID}"}) {
       issue {
         id
       }
