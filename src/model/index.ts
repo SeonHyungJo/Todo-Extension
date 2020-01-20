@@ -1,31 +1,27 @@
-export type repositoryId = string;
-export type token = string;
-export type labelId = string;
-export type todoId = string;
+export type TODO_LIST = Array<Todo>;
+export type LABEL_LIST = Array<Label>;
+export type REPOSITORY_ID = string;
+export type TOKEN = string;
+export type LABEL_ID = string;
+export type TODO_ID = string;
 
 export interface Label {
-  ID: labelId;
+  ID: LABEL_ID;
   title: string;
   color: string;
-  repositoryId?: repositoryId;
 }
 
-export type LabelList = Array<Label>;
-
 export interface Todo {
-  repositoryId: repositoryId;
   title: string;
   body: string;
-  ID?: todoId;
+  ID?: TODO_ID;
   modified?: boolean;
   labelList?: Array<Label>;
 }
 
-export type TodoList = Array<Todo>;
-
 export interface Config {
-  token: token;
-  repositoryId: repositoryId;
+  token: TOKEN;
   owner: string;
   repositoryName: string;
+  repositoryId: REPOSITORY_ID;
 }

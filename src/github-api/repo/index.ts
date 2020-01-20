@@ -1,4 +1,10 @@
-//todo Read Repo Id
-const getRepoId = () => {};
+import { Config } from '@model/index';
 
-export { getRepoId };
+// Read Repo Id
+export const getRepoId = ({ repositoryName, owner }: Config): string => {
+  return `query {
+    repository(name: "${repositoryName}", owner: "${owner}") {
+      id
+    }
+  }`;
+};
