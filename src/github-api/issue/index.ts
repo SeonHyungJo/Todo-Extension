@@ -3,12 +3,15 @@ import { REPOSITORY_ID, TODO_ID, Config, Todo } from '@model/index';
 // Create
 const createIssueQuery = (
   repositoryId: REPOSITORY_ID,
-  { title, body }: Todo,
+  { title, body, labelList = [] }: Todo,
 ): string => {
+  const labelIds = labelList.map(item => {
+    return item.ID;
+  });
+
   return `
   mutation {
-    __typename
-    createIssue(input: {repositoryId: "${repositoryId}", title: "${title}", body: "${body}"}) {
+    createIssue(input: {repositoryId: "${repositoryId}", title: "${title}", body: "${body}", labelIds: "${labelIds}}) {
       issue {
         id
       }

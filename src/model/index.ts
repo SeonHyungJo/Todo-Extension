@@ -16,7 +16,7 @@ export interface Todo {
   body: string;
   ID?: TODO_ID;
   modified?: boolean;
-  labelList?: Array<Label>;
+  labelList?: LABEL_LIST;
 }
 
 export interface Config {
