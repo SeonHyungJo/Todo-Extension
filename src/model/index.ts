@@ -20,8 +20,8 @@ export interface Todo {
 }
 
 export interface Config {
-  token: TOKEN;
   owner: string;
   repositoryName: string;
-  repositoryId: REPOSITORY_ID;
+  token?: string;
+  repositoryId?: REPOSITORY_ID;
 }

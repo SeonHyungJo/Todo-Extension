@@ -1,20 +1,18 @@
-import { Config } from '@src/model';
-
-// import * as ISSUE_API from '@githubApi/issue';
-// import * as LABEL_API from '@githubApi/label';
-import * as REPO_API from '@githubApi/repo';
+import { getState } from '@util/localStorage';
 
 const GITHUB_URL = process.env.GITHUB_URL;
-const TOKEN = process.env.TOKEN;
+const CONFIG_KEY = 'todo_config';
 
-export const getRepoId = (config: Config) => {
+export const requestModule = (query: Function, token?: string) => {
+  const defaultToken = getState(CONFIG_KEY);
+
   return {
     url: GITHUB_URL,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${config.token || TOKEN}`,
+      Authorization: `Bearer ${token || defaultToken}`,
     },
-    body: REPO_API.getRepoId(config),
+    body: query(),
   };
 };
