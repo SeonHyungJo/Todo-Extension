@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --colors",
+    "test": "jest --colors --passWithNoTests",
     "test:coverage": "jest --coverage --no-cache",
     "start": "webpack-dev-server --open",
     "build:dev": "npm run clean && webpack -d --mode development",
@@ -60,5 +60,8 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1"
+  },
+  "dependencies": {
+    "graphql-request": "^1.8.2"
   }
 }
