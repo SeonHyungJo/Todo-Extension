@@ -19,9 +19,12 @@ export interface Todo {
   labelList?: LABEL_LIST;
 }
 
-export interface Config {
+export interface DefaultConfig {
   owner: string;
   repositoryName: string;
-  token?: string;
+}
+
+export interface Config extends DefaultConfig {
+  token: string;
   repositoryId?: REPOSITORY_ID;
 }

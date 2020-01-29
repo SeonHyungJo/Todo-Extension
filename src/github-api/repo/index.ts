@@ -1,8 +1,8 @@
-import { Config } from '@model/index';
+import { DefaultConfig } from '@model/index';
 
 // Read Repo Id
-export const getRepoId = ({ repositoryName, owner }: Config): string => {
-  return `query {
+export const getRepoId = ({ repositoryName, owner }: DefaultConfig): string => {
+  return `{
     repository(name: "${repositoryName}", owner: "${owner}") {
       id
     }

@@ -1,9 +1,5 @@
 import { Config } from '@model/index';
-
-import { GraphQLClient } from 'graphql-request';
 import { getRepoId } from '@githubApi/index';
-
-import { ajax } from 'rxjs/ajax';
 
 const token = process.env.TOKEN || '';
 
@@ -14,10 +10,10 @@ const config: Config = {
   repositoryId: '',
 };
 
-// ajax(getRepoId(config)).pipe(
-//   map(response => console.log('response: ', response)),
-//   catchError(error => {
-//     console.log('error: ', error);
-//     return of(error);
-//   }),
-// );
+const requestData = getRepoId(config);
+
+fetch(requestData.url, {
+  body: JSON.stringify({ query: requestData.body }),
+  method: requestData.method,
+  headers: requestData.headers,
+}).then(response => console.log(response.body));

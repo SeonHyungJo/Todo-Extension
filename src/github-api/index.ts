@@ -6,8 +6,7 @@ import * as REPO_API from '@githubApi/repo';
 import { requestModule } from '@githubApi/request';
 
 export const getRepoId = ({ token, owner, repositoryName }: Config) => {
-  return requestModule(
-    () => REPO_API.getRepoId({ repositoryName, owner }),
-    token,
-  );
+  const body = REPO_API.getRepoId({ repositoryName, owner });
+
+  return requestModule(body, token);
 };
