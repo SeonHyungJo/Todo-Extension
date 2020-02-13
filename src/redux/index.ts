@@ -1,12 +1,12 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
-import { createEpicMiddleware } from 'redux-observable';
+import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import logger from 'redux-logger';
-import { authReducer } from './auth';
+import { authReducer, authEpic } from './auth';
 
 const rootReudcer = combineReducers({
   auth: authReducer,
 });
-
+const rootEpic = combineEpics(authEpic);
 const epicMiddleware = createEpicMiddleware();
 
 export default function configureStore() {
@@ -15,7 +15,7 @@ export default function configureStore() {
     applyMiddleware(epicMiddleware, logger),
   );
 
-  // epicMiddleware.run(rootEpic);
+  epicMiddleware.run(rootEpic);
 
   return store;
 }

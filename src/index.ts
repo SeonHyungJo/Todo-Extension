@@ -1,5 +1,5 @@
-export const indexFunction = () => {
-  return 'index';
-};
+import { USER_LOGIN_TEST } from './redux/auth';
+import configureStore from './redux';
 
-console.log(indexFunction());
+const store = configureStore();
+store.dispatch({ type: USER_LOGIN_TEST });
