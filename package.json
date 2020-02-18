@@ -61,6 +61,7 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
+    "@types/redux-actions": "^2.6.1",
     "@types/redux-logger": "^3.0.7",
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",

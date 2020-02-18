@@ -1,65 +1,55 @@
-// // import { createAction, handleActions } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
+import { addTodoApi } from '@githubApi/todoApi';
 
-// // payload interface
-// export type TODO_LIST = Array<Todo>;
-// export type LABEL_LIST = Array<Label>;
-// export type LABEL_ID = string;
-// export type TODO_ID = string;
+// payload interface
+export type TODO_LIST = Array<Todo>;
+export type LABEL_LIST = Array<Label>;
+export type LABEL_ID = string;
+export type TODO_ID = string;
 
-// export interface Label {
-//   ID: LABEL_ID;
-//   title: string;
-//   color: string;
-// }
+export interface Label {
+  ID: LABEL_ID;
+  title: string;
+  color: string;
+}
 
-// export interface Todo {
-//   title: string;
-//   body: string;
-//   id?: TODO_ID;
-//   modified?: boolean;
-//   labelList?: LABEL_LIST;
-// }
+export interface Todo {
+  title: string;
+  body: string;
+  id?: TODO_ID;
+  modified?: boolean;
+  labelList?: LABEL_LIST;
+}
 
-// export interface TodoState {
-//   todo: TODO_LIST;
-//   label: LABEL_LIST;
-// }
+export interface TodoState {
+  todo: TODO_LIST;
+  label: LABEL_LIST;
+}
 
-// // type
-// export const TODO_UPDATE = 'todo/UPDATE';
-// export const TODO_DELETE = 'todo/DELETE';
+// type
+export const TODO_ADD = 'todo/ADD';
+export const TODO_UPDATE = 'todo/UPDATE';
+export const TODO_DELETE = 'todo/DELETE';
 
-// // action
-// export const addTodo = createAction('TODO_ADD', {
-//   title,
-//   body,
-//   id,
-//   modified = false,
-//   labelList =[],
-// }: Todo) => ({
-//   type: TODO_ADD,
-//   payload: {
-//     title,
-//     body,
-//     id,
-//     modified,
-//     labelList,
-//   },
-// });
+// action
+export const addTodo = createAction(TODO_ADD, addTodoApi);
 
-// // initialState
-// const initialState: TodoState = {
-//   todo: [],
-//   label: [],
-// };
+// initialState
+const initialState: TodoState = {
+  todo: [],
+  label: [],
+};
 
-// //reducer
-// export const todoReducer = handleActions(
-//   {
-//     [TODO_ADD]: (state: TodoState, action: any): TodoState => ({
-//       ...state,
-//       todo: [...state.todo, action.payload],
-//     }),
-//   },
-//   initialState,
-// );
+//reducer
+export const todoReducer = handleActions(
+  {
+    [TODO_ADD]: (state: TodoState, action: any): TodoState => {
+      console.log(action);
+      return {
+        ...state,
+        todo: [...state.todo, action.payload],
+      };
+    },
+  },
+  initialState,
+);
