@@ -21,7 +21,6 @@
   "lint-staged": {
     "*.ts": [
       "npm run lint",
-      "npm run test",
       "git add"
     ]
   },
@@ -62,6 +61,13 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
-    "graphql-request": "^1.8.2"
+    "graphql-request": "^1.8.2",
+    "@types/redux-actions": "^2.6.1",
+    "@types/redux-logger": "^3.0.7",
+    "redux": "^4.0.5",
+    "redux-actions": "^2.6.5",
+    "redux-logger": "^3.0.6",
+    "redux-observable": "^1.2.0",
+    "rxjs": "^6.5.4"
   }
 }
