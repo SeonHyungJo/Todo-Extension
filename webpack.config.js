@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+require('dotenv').config();
 
 const config = {
   entry: './src/index.ts',
@@ -40,15 +41,14 @@ const config = {
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
-      '@src': path.resolve(__dirname, 'src'),
-      '@components': path.resolve(__dirname, 'src/components'),
-      '@githubApi': path.resolve(__dirname, 'src/github-api'),
-      '@redux': path.resolve(__dirname, 'src/redux'),
-      '@model': path.resolve(__dirname, 'src/model'),
-      '@util': path.resolve(__dirname, 'src/util'),
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.TOKEN': JSON.stringify(process.env.TOKEN),
+      'process.env.END_POINT': JSON.stringify(process.env.END_POINT)
+    }),
     new CopyPlugin([
       {
         from: '*.json',
@@ -60,7 +60,7 @@ const config = {
       inject: true,
       appMountId: 'app',
     }),
-  ],
+  ]
 };
 
 module.exports = config;
