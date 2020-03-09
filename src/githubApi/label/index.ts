@@ -1,4 +1,4 @@
-import { Config } from '@model/index';
+import { Config } from '@/model';
 
 //todo Read
 export const getLabelQuery = ({ repositoryName, owner }: Config): string => {

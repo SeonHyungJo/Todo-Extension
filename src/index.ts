@@ -1,6 +1,37 @@
 import { GraphQLClient } from 'graphql-request';
-import { ISSUE_API } from '@githubApi/index';
-import { Config } from '@model/index';
+import { ISSUE_API } from '@/githubApi/index';
+import { Config } from '@/model/index';
+import configureStore from '@/redux';
+import { addTodo } from '@/redux/todo';
+
+const store = configureStore();
+
+function btnClickHandle() {
+  store.dispatch(
+    addTodo({
+      title: 'todo_add 추가',
+      body: 'todo add 기능 추가하기',
+      id: '123',
+      modified: false,
+      labelList: [
+        {
+          id: 'sdfsdfsdf',
+          title: '개인',
+          color: 'red',
+        },
+      ],
+    }),
+  );
+}
+
+/* Create Button for TEST */
+const rootElement = document.getElementById('app');
+const sampleTemplate = `<button id="test">Click me</button><div id="itemList"></div>`;
+
+rootElement.innerHTML = sampleTemplate;
+const btnElement = document.getElementById('test');
+const itemListElement = document.getElementById('itemList');
+btnElement?.addEventListener('click', btnClickHandle);
 
 const config: Config = {
   repositoryName: 'test-github-api',
@@ -9,52 +40,30 @@ const config: Config = {
   repositoryId: '',
 };
 
-const getIssueList = async () => {
-  const endpoint: string = 'https://api.github.com/graphql';
-  const query: string = ISSUE_API.getIssueQuery(config);
-  const graphQLClient: GraphQLClient = new GraphQLClient(endpoint, {
-    headers: {
-      Authorization: `Bearer ${process.env.TOKEN}`,
-    },
+const getIssueList = () => {
+  return new Promise(resolve => {
+    const endpoint: string = process.env.END_POINT || '';
+    const query: string = ISSUE_API.getIssueQuery(config);
+    const graphQLClient: GraphQLClient = new GraphQLClient(endpoint, {
+      headers: {
+        Authorization: `Bearer ${process.env.TOKEN}`,
+      },
+    });
+    const data = graphQLClient.request(query);
+    resolve(data);
   });
-  const data = await graphQLClient.request(query);
-  return data;
 };
 
-console.log(getIssueList());
-import configureStore from './redux';
-import { userLogin } from './redux/auth';
-import { addTodo, updateTodo, delTodo } from './redux/todo';
+function handleChange() {
+  const {
+    todo: { todo },
+  } = store.getState();
+  console.log('todo', todo);
+  const newElemnet = todo.map(({ title, body }) => {
+    return `<div><h1>${title}</h1><p>${body}</p></div>`;
+  });
 
-const store = configureStore();
-store.dispatch(
-  addTodo({
-    title: 'todo_add 추가',
-    body: 'todo add 기능 추가하기',
-    id: '123',
-    modified: false,
-    labelList: [
-      {
-        id: 'sdfsdfsdf',
-        title: '개인',
-        color: 'red',
-      },
-    ],
-  }),
-);
+  itemListElement?.innerHTML = newElemnet.join('');
+}
 
-store.dispatch(
-  updateTodo({
-    title: 'todo_add 업데이트',
-    body: 'todo add 기능 업데이트',
-    id: '123',
-    modified: false,
-    labelList: [],
-  }),
-);
-
-store.dispatch(
-  delTodo({
-    id: '123',
-  }),
-);
+const unsubscribe = store.subscribe(handleChange);
