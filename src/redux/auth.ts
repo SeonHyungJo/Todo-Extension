@@ -32,6 +32,16 @@ export const userLogin = ({ repoName, token, owner }: IUserLoginParam) => ({
   },
 });
 
+export const testUserLogin = ({ repoName, token, owner }: IUserLoginParam) => ({
+  type: USER_LOGIN,
+  payload: {
+    repoName,
+    token,
+    owner,
+    repoID: 'testRepoID',
+  },
+});
+
 const userLoginEpic = (action$: Observable<Action>): Observable<Action> => {
   return action$.pipe(ofType(USER_LOGIN_ASYNC), mapTo({ type: USER_LOGIN }));
 };
@@ -51,8 +61,7 @@ export function authReducer(state = initialState, action: any): IState {
   switch (action.type) {
     case USER_LOGIN:
       return {
-        ...state,
-        repoID: action.payload.repoID,
+        ...action.payload,
       };
     default:
       return state;
