@@ -3,4 +3,4 @@ import App from '@/components/App';
 
 const store = configureStore();
 
-new App(document.getElementById('app'), store);
+new App(document.getElementById('app') || document.body, store);
