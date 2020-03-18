@@ -1,12 +1,16 @@
-import { testUserLogout } from '@/redux/auth';
+import TodoEditor from '@/components/TodoEditor';
+import TodoItem from './TodoItem';
 
 class Main {
   $mainPage: HTMLElement;
+  $todoEditor: TodoEditor | null = null;
+  $todoItem: TodoItem | null = null;
   data: any;
   dispatch: any;
 
   constructor($target: HTMLElement | null, props: any) {
     const $mainPage = document.createElement('section');
+    $mainPage.classList.add('main');
     this.$mainPage = $mainPage;
 
     this.data = props.data;
@@ -17,16 +21,15 @@ class Main {
   }
 
   render() {
-    this.$mainPage.innerHTML = `
-      <div>main</div>
-      <button class="logout">로그아웃</button>
-    `;
+    const $todoEditor = new TodoEditor(this.$mainPage, {
+      dispatch: this.dispatch,
+    });
+    this.$todoEditor = $todoEditor;
 
-    document
-      .getElementsByClassName('logout')[0]
-      .addEventListener('click', () => {
-        this.dispatch(testUserLogout());
-      });
+    const $todoItem = new TodoItem(this.$mainPage, {
+      dispatch: this.dispatch,
+    });
+    this.$todoItem = $todoItem;
   }
 }
 
