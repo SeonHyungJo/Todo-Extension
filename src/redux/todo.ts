@@ -1,5 +1,4 @@
 import { createAction, handleActions } from 'redux-actions';
-import { addTodoApi } from '@githubApi/todoApi';
 
 // payload interface
 export type TODO_LIST = Array<Todo>;
@@ -27,14 +26,33 @@ export interface TodoState {
 }
 
 // type
+const TODO_GET = 'todo/GET';
 const TODO_ADD = 'todo/ADD';
+const TODO_DONE = 'todo/DONE';
 const TODO_UPDATE = 'todo/UPDATE';
 const TODO_DELETE = 'todo/DELETE';
 
+const LABEL_GET = 'label/GET';
+
 // action
-export const addTodo = createAction(TODO_ADD, addTodoApi);
-export const updateTodo = createAction(TODO_UPDATE, addTodoApi);
-export const delTodo = createAction(TODO_DELETE, addTodoApi);
+export const getTodo = createAction(TODO_GET);
+export const addTodo = createAction(TODO_ADD);
+export const doneTodo = createAction(TODO_DONE);
+export const updateTodo = createAction(TODO_UPDATE);
+export const delTodo = createAction(TODO_DELETE);
+
+export const getLabel = createAction(LABEL_GET);
+
+// epic
+// TODO feature: 투두 추가
+
+// TODO feature: 투두 내용|제목|라벨 수정
+
+// TODO feature: 투두 Close
+
+// TODO feature: 투두 삭제
+
+// TODO feature: 투두 추가|수정|Close|삭제 이후 서버의 데이터와 일치하는지 확인하는 기능
 
 // initialState
 const initialState: TodoState = {

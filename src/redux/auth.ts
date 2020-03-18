@@ -1,7 +1,8 @@
 import { Observable } from 'rxjs';
 import { Action } from 'redux';
 import { ofType, combineEpics } from 'redux-observable';
-import { mergeMap, mapTo } from 'rxjs/operators';
+import { mapTo } from 'rxjs/operators';
+import { createAction } from 'redux-actions';
 
 // payload interface
 export interface IUserLoginParam {
@@ -18,25 +19,27 @@ export interface IState {
 }
 
 // type
-export const USER_LOGIN_ASYNC = 'auth/USER_LOGIN_ASYNC';
 export const USER_LOGIN = 'auth/USER_LOGIN';
+export const USER_LOGIN_ASYNC = 'auth/USER_LOGIN_ASYNC';
 
 // action
-export const userLogin = ({ repoName, token, owner }: IUserLoginParam) => ({
-  type: USER_LOGIN_ASYNC,
-  payload: {
+export const userLogin = createAction(
+  USER_LOGIN,
+  ({ repoName, token, owner }: IUserLoginParam) => ({
     repoName,
     token,
     owner,
     repoID: 'testRepoID',
-  },
-});
+  }),
+);
 
+// epic
+// TODO feature: 로그인|token확인|RepoId 받아오기
 const userLoginEpic = (action$: Observable<Action>): Observable<Action> => {
   return action$.pipe(ofType(USER_LOGIN_ASYNC), mapTo({ type: USER_LOGIN }));
 };
 
-export const authEpic = combineEpics(userLoginEpic);
+// TODO feature: 로그아웃
 
 // initialState
 const initialState: IState = {
@@ -58,3 +61,5 @@ export function authReducer(state = initialState, action: any): IState {
       return state;
   }
 }
+
+export const authEpic = combineEpics(userLoginEpic);
