@@ -1,7 +1,8 @@
-const webpack = require('webpack')
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+require('dotenv').config();
 
 const config = {
   entry: './src/index.ts',
@@ -44,6 +45,10 @@ const config = {
     }
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.TOKEN': JSON.stringify(process.env.TOKEN),
+      'process.env.END_POINT': JSON.stringify(process.env.END_POINT)
+    }),
     new CopyPlugin([
       {
         from: '*.json',
@@ -53,9 +58,9 @@ const config = {
     new HtmlWebpackPlugin({
       template: 'public/index.html',
       inject: true,
-      appMountId: 'app'
-    })
+      appMountId: 'app',
+    }),
   ]
-}
+};
 
 module.exports = config
