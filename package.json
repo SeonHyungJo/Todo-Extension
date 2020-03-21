@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/SeonHyungJo/Todo-Extension#readme",
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/jest": "^24.0.25",
     "@typescript-eslint/eslint-plugin": "^2.15.0",
     "@typescript-eslint/parser": "^2.15.0",
@@ -63,6 +64,7 @@
   "dependencies": {
     "@types/redux-actions": "^2.6.1",
     "@types/redux-logger": "^3.0.7",
+    "dotenv": "^8.2.0",
     "graphql-request": "^1.8.2",
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",
