@@ -1,4 +1,4 @@
-import { Config } from '@model/index';
+import { Config } from '@/model';
 
 // Read Repo Id
 export const getRepoId = ({ repositoryName, owner }: Config): string => {

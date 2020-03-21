@@ -8,18 +8,18 @@ const config = {
   entry: './src/index.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js',
+    filename: '[name].[contenthash].js'
   },
   module: {
     rules: [
       {
         test: /\.ts(x)?$/,
         use: ['awesome-typescript-loader'],
-        exclude: /node_modules/,
+        exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.png$/,
@@ -27,22 +27,22 @@ const config = {
           {
             loader: 'url-loader',
             options: {
-              mimetype: 'image/png',
-            },
-          },
-        ],
+              mimetype: 'image/png'
+            }
+          }
+        ]
       },
       {
         test: /\.svg$/,
-        use: 'file-loader',
-      },
-    ],
+        use: 'file-loader'
+      }
+    ]
   },
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
-      '@': path.resolve(__dirname, 'src'),
-    },
+      '@': path.resolve(__dirname, 'src')
+    }
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -52,8 +52,8 @@ const config = {
     new CopyPlugin([
       {
         from: '*.json',
-        context: 'public',
-      },
+        context: 'public'
+      }
     ]),
     new HtmlWebpackPlugin({
       template: 'public/index.html',
@@ -63,4 +63,4 @@ const config = {
   ]
 };
 
-module.exports = config;
+module.exports = config

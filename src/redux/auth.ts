@@ -20,6 +20,7 @@ export interface IState {
 // type
 export const USER_LOGIN_ASYNC = 'auth/USER_LOGIN_ASYNC';
 export const USER_LOGIN = 'auth/USER_LOGIN';
+export const USER_LOGOUT = 'auth/USER_LOGOUT';
 
 // action
 export const userLogin = ({ repoName, token, owner }: IUserLoginParam) => ({
@@ -30,6 +31,20 @@ export const userLogin = ({ repoName, token, owner }: IUserLoginParam) => ({
     owner,
     repoID: 'testRepoID',
   },
+});
+
+export const testUserLogin = ({ repoName, token, owner }: IUserLoginParam) => ({
+  type: USER_LOGIN,
+  payload: {
+    repoName,
+    token,
+    owner,
+    repoID: 'testRepoID',
+  },
+});
+
+export const testUserLogout = () => ({
+  type: USER_LOGOUT,
 });
 
 const userLoginEpic = (action$: Observable<Action>): Observable<Action> => {
@@ -51,8 +66,14 @@ export function authReducer(state = initialState, action: any): IState {
   switch (action.type) {
     case USER_LOGIN:
       return {
-        ...state,
-        repoID: action.payload.repoID,
+        ...action.payload,
+      };
+    case USER_LOGOUT:
+      return {
+        repoName: '',
+        owner: '',
+        token: '',
+        repoID: '',
       };
     default:
       return state;
