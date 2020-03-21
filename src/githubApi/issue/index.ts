@@ -1,4 +1,4 @@
-import { REPOSITORY_ID, TODO_ID, Config, Todo } from '@model/index';
+import { REPOSITORY_ID, TODO_ID, Config, Todo } from '@/model';
 
 // Create
 const createIssueQuery = (

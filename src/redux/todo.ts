@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { addTodoApi } from '@githubApi/todoApi';
+import { addTodoApi } from '@/githubApi/todoApi';
 
 // payload interface
 export type TODO_LIST = Array<Todo>;
