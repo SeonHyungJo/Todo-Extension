@@ -1,12 +1,11 @@
 import { REPOSITORY_ID, TODO_ID, Config, Todo } from '@/model';
 
-// Create
-const createIssueQuery = (
+export const createIssueQuery = (
   repositoryId: REPOSITORY_ID,
   { title, body, labelList = [] }: Todo,
 ): string => {
   const labelIds = labelList.map(item => {
-    return item.ID;
+    return item.id;
   });
 
   return `
@@ -20,9 +19,7 @@ const createIssueQuery = (
   `;
 };
 
-// Read
-const getIssueQuery = ({ owner, repositoryName }: Config): string => {
-  return `
+export const getIssueQuery = ({ owner, repositoryName }: Config): string => `
   query {
     repository(name: "${repositoryName}", owner: "${owner}") {
       issues(first: 10, states: OPEN) {
@@ -45,15 +42,12 @@ const getIssueQuery = ({ owner, repositoryName }: Config): string => {
       }
     }
   }
-  `;
-};
+`;
 
-//todo Update
-const updateIssueQuery = (
+export const updateIssueQuery = (
   repositoryId: REPOSITORY_ID,
   { title, body }: Todo,
-): string => {
-  return `
+): string => `
   mutation {
     updateIssue(input: {id: "${repositoryId}", body: "${body}", title: "${title}}) {
       issue {
@@ -64,20 +58,14 @@ const updateIssueQuery = (
       }
     }
   }
-  `;
-};
+`;
 
-//todo Delete
-const deleteIssueQuery = (ID: TODO_ID): string => {
-  return `
+export const deleteIssueQuery = (id: TODO_ID): string => `
   mutation {
-    closeIssue(input: {issueId: "${ID}"}) {
+    closeIssue(input: {issueId: "${id}"}) {
       issue {
         id
       }
     }
   }
-  `;
-};
-
-export { createIssueQuery, getIssueQuery, updateIssueQuery, deleteIssueQuery };
+`;

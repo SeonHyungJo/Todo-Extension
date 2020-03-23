@@ -6,7 +6,7 @@ export type LABEL_ID = string;
 export type TODO_ID = string;
 
 export interface Label {
-  ID: LABEL_ID;
+  id: LABEL_ID;
   title: string;
   color: string;
 }
@@ -14,7 +14,7 @@ export interface Label {
 export interface Todo {
   title: string;
   body: string;
-  ID?: TODO_ID;
+  id?: TODO_ID;
   modified?: boolean;
   labelList?: LABEL_LIST;
 }

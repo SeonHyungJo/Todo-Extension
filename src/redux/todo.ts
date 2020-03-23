@@ -1,26 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
-import { addTodoApi } from '@/githubApi/todoApi';
+import { TODO_LIST, LABEL_LIST } from '@/model';
 
 // payload interface
-export type TODO_LIST = Array<Todo>;
-export type LABEL_LIST = Array<Label>;
-export type LABEL_ID = string;
-export type TODO_ID = string;
-
-export interface Label {
-  id: LABEL_ID;
-  title: string;
-  color: string;
-}
-
-export interface Todo {
-  title: string;
-  body: string;
-  id?: TODO_ID;
-  modified?: boolean;
-  labelList?: LABEL_LIST;
-}
-
 export interface TodoState {
   todo: TODO_LIST;
   label: LABEL_LIST;
@@ -45,6 +26,8 @@ export const delTodo = createAction(TODO_DELETE);
 export const getLabel = createAction(LABEL_GET);
 
 // epic
+// TODO feature: 투두 리스트 가져오기
+
 // TODO feature: 투두 추가
 
 // TODO feature: 투두 내용|제목|라벨 수정

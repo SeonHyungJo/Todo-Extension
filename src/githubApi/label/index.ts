@@ -1,8 +1,6 @@
 import { Config } from '@/model';
 
-//todo Read
-export const getLabelQuery = ({ repositoryName, owner }: Config): string => {
-  return `
+export const getLabelQuery = ({ repositoryName, owner }: Config): string => `
   query {
     repository(name: "${repositoryName}", owner: "${owner}") {
       id
@@ -17,5 +15,4 @@ export const getLabelQuery = ({ repositoryName, owner }: Config): string => {
       }
     }
   }
-  `;
-};
+`;

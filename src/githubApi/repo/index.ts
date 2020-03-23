@@ -1,10 +1,9 @@
 import { Config } from '@/model';
 
-// Read Repo Id
-export const getRepoId = ({ repositoryName, owner }: Config): string => {
-  return `query {
+export const getRepoId = ({ repositoryName, owner }: Config): string => `
+  query {
     repository(name: "${repositoryName}", owner: "${owner}") {
       id
     }
-  }`;
-};
+  }
+`;
