@@ -59,3 +59,12 @@ export function setItem(
 
   return setDataToLocalStorage(key, stringifyData);
 }
+
+export function deleteItem(key: string): void {
+  if (!key) {
+    console.error('key is not defined');
+    return;
+  }
+
+  return localStorage.removeItem(key);
+}
