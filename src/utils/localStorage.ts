@@ -1,29 +1,10 @@
-function encode(value: string) {
-  return window.btoa(encodeURIComponent(value));
-}
+import { encode, decode } from '@/utils/encrypt';
 
-function decode(encoded: string) {
-  return decodeURIComponent(window.atob(encoded));
-}
-
-function getDataFromLocalStorage(data: string): object {
-  return JSON.parse(data);
-}
-
-function setDataToLocalStorage(key: string, data: string): void {
-  return window.localStorage.setItem(key, data);
-}
-
-/**
- * @param key : localStorge에 저장된 값에 대한 key
- * @param defaultValue : localStroge에 해당 key에 대한 값이 없을 때 반환할 value
- * @param isEncoded : 암호화 여부
- */
-export function getItem(
+export const getItem = (
   key: string,
   defaultValue: any,
   isEncoded: boolean = false,
-): object {
+): object => {
   const plainData = window.localStorage.getItem(key);
 
   if (!plainData) {
@@ -32,39 +13,27 @@ export function getItem(
     };
   }
 
-  if (isEncoded) {
-    const decodedData = decode(plainData);
-    return getDataFromLocalStorage(decodedData);
-  }
+  const decodedData = isEncoded ? decode(plainData) : plainData;
 
-  return getDataFromLocalStorage(plainData);
-}
+  return JSON.parse(decodedData);
+};
 
-/**
- * @param key : localStorge에 저장할 값에 대한 key
- * @param defaultValue : localStroge에 저장 할 해당 key에 대한 value
- * @param isEncoded : 암호화 여부
- */
-export function setItem(
+export const setItem = (
   key: string,
   value: any,
   isEncoded: boolean = false,
-): void {
-  const stringifyData = JSON.stringify(value);
+): void => {
+  const stringifyData = isEncoded
+    ? JSON.stringify(value)
+    : encode(JSON.stringify(value));
 
-  if (isEncoded) {
-    const encodedData = encode(stringifyData);
-    return setDataToLocalStorage(key, encodedData);
-  }
+  window.localStorage.setItem(key, stringifyData);
+};
 
-  return setDataToLocalStorage(key, stringifyData);
-}
-
-export function deleteItem(key: string): void {
+export const deleteItem = (key: string): void => {
   if (!key) {
     console.error('key is not defined');
-    return;
+  } else {
+    localStorage.removeItem(key);
   }
-
-  return localStorage.removeItem(key);
-}
+};
