@@ -10,12 +10,7 @@ const config = {
   testEnvironment: 'node',
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
   moduleNameMapper: {
-    '@src/(.*)$': '<rootDir>/src/$1',
-    '@components/(.*)$': '<rootDir>/src/components/$1',
-    '@githubApi/(.*)$': '<rootDir>/src/github-api/$1',
-    '@redux/(.*)$': '<rootDir>/src/redux/$1',
-    '@model/(.*)$': '<rootDir>/src/model/$1',
-    '@util/(.*)$': '<rootDir>/src/util/$1',
+    '@/(.*)$': '<rootDir>/src/$1',
   },
   collectCoverageFrom: ['**/*.{ts,}', '!**/node_modules/**', '!**/dist/**'],
   coverageThreshold: {
