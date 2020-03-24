@@ -1,3 +1,5 @@
+import { userLogin } from '@/redux/auth';
+
 class Config {
   $configPage: HTMLElement;
   data: any; // Todo 정의 필요
@@ -41,6 +43,18 @@ class Config {
         <button class="config__bottom__check-btn">Check</button>
       </section>
     `;
+
+    console.warn('===Start Login Feature===');
+
+    this.dispatch(
+      userLogin({
+        repoName: '',
+        owner: '',
+        token: '',
+      }),
+    );
+
+    console.warn('===End Login Feature===');
   }
 }
 

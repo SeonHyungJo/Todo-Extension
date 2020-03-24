@@ -1,8 +1,8 @@
-import { Config } from '@/model';
+import { IUserLoginParam } from '@/redux/auth';
 
-export const getRepoId = ({ repositoryName, owner }: Config): string => `
+export const getRepoId = ({ repoName, owner }: IUserLoginParam): string => `
   query {
-    repository(name: "${repositoryName}", owner: "${owner}") {
+    repository(name: "${repoName}", owner: "${owner}") {
       id
     }
   }

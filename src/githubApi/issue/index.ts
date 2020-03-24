@@ -19,9 +19,9 @@ export const createIssueQuery = (
   `;
 };
 
-export const getIssueQuery = ({ owner, repositoryName }: Config): string => `
+export const getIssueQuery = ({ owner, repoName }: Config): string => `
   query {
-    repository(name: "${repositoryName}", owner: "${owner}") {
+    repository(name: "${repoName}", owner: "${owner}") {
       issues(first: 10, states: OPEN) {
         edges {
           node {
@@ -45,11 +45,11 @@ export const getIssueQuery = ({ owner, repositoryName }: Config): string => `
 `;
 
 export const updateIssueQuery = (
-  repositoryId: REPOSITORY_ID,
+  repoId: REPOSITORY_ID,
   { title, body }: Todo,
 ): string => `
   mutation {
-    updateIssue(input: {id: "${repositoryId}", body: "${body}", title: "${title}}) {
+    updateIssue(input: {id: "${repoId}", body: "${body}", title: "${title}}) {
       issue {
         updatedAt
         title

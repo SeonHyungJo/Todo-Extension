@@ -16,19 +16,19 @@ class App {
     this.$target = $target;
     this.rootStore = store.getState();
 
-    // if (this.rootStore.auth.repoID === '') {
-    //   this.$config = new Config($target, {
-    //     data: this.rootStore.auth,
-    //     dispatch: store.dispatch,
-    //   });
-    //   this.currentPath = PATH_CONFIG;
-    // } else {
-    this.$main = new Main($target, {
-      data: this.rootStore.todo,
-      dispatch: store.dispatch,
-    });
-    this.currentPath = PATH_INDEX;
-    // }
+    if (this.rootStore.auth.repoID === '') {
+      this.$config = new Config($target, {
+        data: this.rootStore.auth,
+        dispatch: store.dispatch,
+      });
+      this.currentPath = PATH_CONFIG;
+      // } else {
+      //   this.$main = new Main($target, {
+      //     data: this.rootStore.todo,
+      //     dispatch: store.dispatch,
+      //   });
+      //   this.currentPath = PATH_INDEX;
+    }
   }
 }
 
