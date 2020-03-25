@@ -6,9 +6,8 @@ const config = {
   preset: 'ts-jest',
   roots: ['<rootDir>/__tests__'],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(ts?)$',
-  moduleFileExtensions: ['ts', 'js'],
+  moduleFileExtensions: ['js', 'ts'],
   testEnvironment: 'node',
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
   moduleNameMapper: {
     '@/(.*)$': '<rootDir>/src/$1',
   },
@@ -21,6 +20,12 @@ const config = {
       statements: 50,
     },
   },
+  globals: {
+    'ts-jest': {
+      diagnostics: true,
+    },
+  },
+  testMatch: null,
 };
 
 module.exports = config;
