@@ -24,8 +24,8 @@ export const setItem = (
   isEncoded: boolean = false,
 ): void => {
   const stringifyData = isEncoded
-    ? JSON.stringify(value)
-    : encode(JSON.stringify(value));
+    ? encode(JSON.stringify(value))
+    : JSON.stringify(value);
 
   window.localStorage.setItem(key, stringifyData);
 };
