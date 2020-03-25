@@ -1,8 +1,14 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import logger from 'redux-logger';
+
 import { authReducer, authEpic } from './auth';
 import { todoReducer } from './todo';
+
+export interface ActionInterface {
+  type: string;
+  payload: any;
+}
 
 const rootReudcer = combineReducers({
   auth: authReducer,
@@ -10,7 +16,7 @@ const rootReudcer = combineReducers({
 });
 
 const rootEpic = combineEpics(authEpic);
-const epicMiddleware = createEpicMiddleware();
+const epicMiddleware = createEpicMiddleware<ActionInterface>();
 
 export default function configureStore() {
   const store = createStore(

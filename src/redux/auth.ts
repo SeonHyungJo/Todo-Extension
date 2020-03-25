@@ -1,10 +1,12 @@
 import { Observable } from 'rxjs';
-import { ajax, AjaxResponse } from 'rxjs/ajax';
-import { Action } from 'redux';
-import { ofType, combineEpics } from 'redux-observable';
-import { mapTo, mergeMap, map } from 'rxjs/operators';
+import { AjaxResponse } from 'rxjs/ajax';
+import { mergeMap, map } from 'rxjs/operators';
 import { createAction } from 'redux-actions';
+import { ofType, combineEpics, Epic } from 'redux-observable';
+
+import { ActionInterface } from '@/redux';
 import { getRepoId } from '@/githubApi/repo';
+import { request } from '@/redux/common';
 
 // payload interface
 export interface IState {
@@ -19,13 +21,11 @@ export type IUserLoginParam = Omit<IState, 'repoID'>;
 // type
 export const USER_LOGIN = 'auth/USER_LOGIN';
 export const USER_LOGIN_FAIL = 'auth/USER_LOGIN_FAIL';
-
 export const USER_LOGIN_ASYNC = 'auth/USER_LOGIN_ASYNC';
+
 export const USER_LOGOUT = 'auth/USER_LOGOUT';
 
 // action
-// epic
-// TODO feature: 로그인|token확인|RepoId 받아오기
 export const userLogin = createAction(
   USER_LOGIN_ASYNC,
   ({ repoName, token, owner }: IUserLoginParam) => ({
@@ -35,34 +35,18 @@ export const userLogin = createAction(
   }),
 );
 
-export const userLoginEpic = (
-  action$: Observable<Action>,
-): Observable<Action> => {
+export const userLoginEpic: Epic<ActionInterface> = (
+  action$: Observable<ActionInterface>,
+) => {
   return action$.pipe(
-    ofType(USER_LOGIN_ASYNC),
-    mergeMap(action => {
-      console.log('userLoginEpic ===> ', action);
-      return ajax
-        .post(
-          process.env.END_POINT || '',
-          {
-            query: getRepoId({
-              repoName: 'test-github-api',
-              owner: 'seonhyungjo',
-              token: process.env.TOKEN || '',
-            }),
-          },
-          {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.TOKEN}`,
-          },
-        )
-        .pipe(
-          map(({ response: { data } }: AjaxResponse) => ({
-            type: USER_LOGIN,
-            payload: data,
-          })),
-        );
+    ofType<ActionInterface>(USER_LOGIN_ASYNC),
+    mergeMap((action: ActionInterface) => {
+      return request(getRepoId(action.payload)).pipe(
+        map(({ response: { data } }: AjaxResponse) => ({
+          type: USER_LOGIN,
+          payload: { ...action.payload, repoID: data.repository.id },
+        })),
+      );
     }),
   );
 };
@@ -79,10 +63,10 @@ const initialState: IState = {
 
 //reducer
 export function authReducer(state = initialState, action: any): IState {
-  console.log('Auth Reducer ', action);
   switch (action.type) {
     case USER_LOGIN:
       return {
+        ...state,
         ...action.payload,
       };
     case USER_LOGIN_FAIL:
