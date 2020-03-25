@@ -43,18 +43,6 @@ class Config {
         <button class="config__bottom__check-btn">Check</button>
       </section>
     `;
-
-    console.warn('===Start Login Feature===');
-
-    this.dispatch(
-      userLogin({
-        repoName: '',
-        owner: '',
-        token: '',
-      }),
-    );
-
-    console.warn('===End Login Feature===');
   }
 }
 

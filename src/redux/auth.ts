@@ -7,6 +7,7 @@ import { ofType, combineEpics, Epic } from 'redux-observable';
 import { ActionInterface } from '@/redux';
 import { getRepoId } from '@/githubApi/repo';
 import { request } from '@/redux/common';
+import { setItem, getItem } from '@/utils/localStorage';
 
 // payload interface
 export interface IState {
@@ -54,19 +55,23 @@ export const userLoginEpic: Epic<ActionInterface> = (
 // TODO feature: 로그아웃
 
 // initialState
-const initialState: IState = {
+const CONFIG_KEY = 'config';
+const defaultState: IState = {
   repoName: '',
   owner: '',
   token: '',
   repoID: '',
 };
 
+const initialState: IState = getItem(CONFIG_KEY, defaultState, true);
+
 //reducer
 export function authReducer(state = initialState, action: any): IState {
   switch (action.type) {
     case USER_LOGIN:
+      setItem(CONFIG_KEY, action.payload, true);
+
       return {
-        ...state,
         ...action.payload,
       };
     case USER_LOGIN_FAIL:
