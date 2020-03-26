@@ -1,3 +1,5 @@
+import { userLogin } from '@/redux/auth';
+
 class Config {
   $configPage: HTMLElement;
   data: any; // Todo 정의 필요

@@ -1,8 +1,8 @@
 import { Config } from '@/model';
 
-export const getLabelQuery = ({ repositoryName, owner }: Config): string => `
+export const getLabelQuery = ({ repoName, owner }: Config): string => `
   query {
-    repository(name: "${repositoryName}", owner: "${owner}") {
+    repository(name: "${repoName}", owner: "${owner}") {
       id
       labels(first: 100) {
         edges {
