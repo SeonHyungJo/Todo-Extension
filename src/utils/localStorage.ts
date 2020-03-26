@@ -5,6 +5,8 @@ export const getItem = (
   defaultValue: any,
   isEncoded: boolean = false,
 ) => {
+  if (!window.localStorage) return defaultValue;
+
   const plainData = window.localStorage.getItem(key);
 
   if (!plainData) return defaultValue;
@@ -23,6 +25,8 @@ export const setItem = (
     ? encode(JSON.stringify(value))
     : JSON.stringify(value);
 
+  if (!window.localStorage) return;
+
   window.localStorage.setItem(key, stringifyData);
 };
 
@@ -30,6 +34,8 @@ export const deleteItem = (key: string): void => {
   if (!key) {
     console.error('key is not defined');
   } else {
-    localStorage.removeItem(key);
+    if (!window.localStorage) return;
+
+    window.localStorage.removeItem(key);
   }
 };

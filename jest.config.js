@@ -24,6 +24,7 @@ const config = {
     'ts-jest': {
       diagnostics: true,
     },
+    'window': {}
   },
   testMatch: null,
 };

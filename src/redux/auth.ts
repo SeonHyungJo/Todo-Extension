@@ -7,7 +7,7 @@ import { ofType, combineEpics, Epic } from 'redux-observable';
 import { ActionInterface } from '@/redux';
 import { getRepoId } from '@/githubApi/repo';
 import { request } from '@/redux/common';
-import { setItem, getItem } from '@/utils/localStorage';
+import { setItem, getItem, deleteItem } from '@/utils/localStorage';
 
 // payload interface
 export interface IState {
@@ -52,7 +52,7 @@ export const userLoginEpic: Epic<ActionInterface> = (
   );
 };
 
-// TODO feature: 로그아웃
+export const userLogout = createAction(USER_LOGOUT);
 
 // initialState
 const CONFIG_KEY = 'config';
@@ -79,6 +79,8 @@ export function authReducer(state = initialState, action: any): IState {
         ...action.payload,
       };
     case USER_LOGOUT:
+      deleteItem(CONFIG_KEY);
+
       return {
         ...initialState,
       };

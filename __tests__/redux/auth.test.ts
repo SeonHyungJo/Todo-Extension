@@ -1,6 +1,12 @@
-import { authReducer, IUserLoginParam, IState, USER_LOGIN } from '@/redux/auth';
+import {
+  authReducer,
+  IUserLoginParam,
+  IState,
+  USER_LOGIN,
+  USER_LOGOUT,
+} from '@/redux/auth';
 
-test('Auth Feature Testing', () => {
+test('Auth Login Feature Testing', () => {
   // given
   const prevState: IState = {
     repoName: '',
@@ -24,6 +30,31 @@ test('Auth Feature Testing', () => {
   // done
   const expectValue = {
     ...userLogin,
+    repoID: '',
+  };
+
+  expect(expectValue).toStrictEqual(resultValue);
+});
+
+test('Auth Logout Feature Testing', () => {
+  // given
+  const prevState: IState = {
+    repoName: 'Dev-Docs',
+    owner: 'BKJang',
+    token: 'testToken',
+    repoID: 'testID',
+  };
+
+  // when
+  const resultValue = authReducer(prevState, {
+    type: USER_LOGOUT,
+  });
+
+  // done
+  const expectValue = {
+    repoName: '',
+    owner: '',
+    token: '',
     repoID: '',
   };
 
