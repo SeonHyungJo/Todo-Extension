@@ -7,11 +7,7 @@ export const getItem = (
 ): object => {
   const plainData = window.localStorage.getItem(key);
 
-  if (!plainData) {
-    return {
-      [key]: defaultValue,
-    };
-  }
+  if (!plainData) return defaultValue;
 
   const decodedData = isEncoded ? decode(plainData) : plainData;
 
