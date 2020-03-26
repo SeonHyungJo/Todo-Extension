@@ -4,7 +4,7 @@ export const getItem = (
   key: string,
   defaultValue: any,
   isEncoded: boolean = false,
-): object => {
+) => {
   const plainData = window.localStorage.getItem(key);
 
   if (!plainData) return defaultValue;
