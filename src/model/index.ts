@@ -25,3 +25,21 @@ export interface Config {
   repoName: string;
   repoId: REPOSITORY_ID;
 }
+
+export type GET_CONFIG = Omit<Config, 'token' | 'repoId'>;
+
+// ===== GITHUB MODEL =====
+export interface Github_Edges<T> {
+  edges: Array<Github_Node<T>>;
+}
+
+export interface Github_Node<T> {
+  node: T;
+}
+
+export interface Github_Issue {
+  id: string;
+  title: string;
+  bodyHTML: string;
+  labels: Github_Edges<Label>;
+}

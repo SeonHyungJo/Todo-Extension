@@ -22,12 +22,12 @@ class App {
         dispatch: store.dispatch,
       });
       this.currentPath = PATH_CONFIG;
-      // } else {
-      //   this.$main = new Main($target, {
-      //     data: this.rootStore.todo,
-      //     dispatch: store.dispatch,
-      //   });
-      //   this.currentPath = PATH_INDEX;
+    } else {
+      this.$main = new Main($target, {
+        data: this.rootStore.todo,
+        dispatch: store.dispatch,
+      });
+      this.currentPath = PATH_INDEX;
     }
   }
 }
