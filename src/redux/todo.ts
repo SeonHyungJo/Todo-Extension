@@ -16,6 +16,7 @@ import {
 import { ActionInterface } from '@/redux';
 import { request } from './common';
 import { getIssueQuery } from '@/githubApi/issue';
+import { setItem } from '@/utils/localStorage';
 
 // payload interface
 export interface TodoState {
@@ -97,6 +98,8 @@ const getTodoEpic: Epic<ActionInterface> = (
 // TODO feature: 투두 추가|수정|Close|삭제 이후 서버의 데이터와 일치하는지 확인하는 기능
 
 // initialState
+const TODO_KEY = 'todo';
+const LABEL_KEY = 'label';
 const initialState: TodoState = {
   todoItems: [],
   label: [],
@@ -109,6 +112,8 @@ export const todoReducer = handleActions(
       state: TodoState,
       { payload }: Action<TODO_LIST>,
     ): TodoState => {
+      setItem(TODO_KEY, payload, false);
+
       return {
         ...state,
         todoItems: payload,
