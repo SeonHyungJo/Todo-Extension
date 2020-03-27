@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { createAction, handleActions } from 'redux-actions';
+import { createAction, handleActions, Action } from 'redux-actions';
 import { Epic, ofType, combineEpics, StateObservable } from 'redux-observable';
 import { mergeMap, map } from 'rxjs/operators';
 import { AjaxResponse } from 'rxjs/ajax';
@@ -11,6 +11,7 @@ import {
   Label,
   Github_Issue,
   Github_Node,
+  Github_Edges,
 } from '@/model';
 import { ActionInterface } from '@/redux';
 import { request } from './common';
@@ -24,8 +25,7 @@ export interface TodoState {
 
 // type
 export const TODO_GET = 'todo/GET';
-export const TODO_GET_SUCCESS = 'todo/GET/SUCCESS';
-export const TODO_GET_FAIL = 'todo/GET/FAIL';
+export const TODO_SET = 'todo/GET/SUCCESS';
 
 export const TODO_ADD = 'todo/ADD';
 export const TODO_DONE = 'todo/DONE';
@@ -34,8 +34,33 @@ export const TODO_DELETE = 'todo/DELETE';
 
 export const LABEL_GET = 'label/GET';
 
+export const TODO_FAIL = 'todo/GET/FAIL';
+
 // action
 export const getTodo = createAction(TODO_GET);
+export const successRequestTodo = createAction(
+  TODO_SET,
+  ({ edges }: Github_Edges<Github_Issue>) => {
+    const todoList: Array<Todo> = edges.map(
+      ({ node }: Github_Node<Github_Issue>) => {
+        const labelList =
+          node?.labels?.edges?.map(
+            ({ node }: Github_Node<Label>): Label => ({ ...node }),
+          ) ?? [];
+
+        return {
+          title: node.title,
+          body: node.bodyHTML,
+          id: node.id,
+          modified: false,
+          labelList,
+        };
+      },
+    );
+
+    return todoList;
+  },
+);
 
 export const addTodo = createAction(TODO_ADD);
 export const doneTodo = createAction(TODO_DONE);
@@ -53,10 +78,9 @@ const getTodoEpic: Epic<ActionInterface> = (
     ofType<ActionInterface>(TODO_GET),
     mergeMap(() => {
       return request(getIssueQuery(state$.value.auth)).pipe(
-        map(({ response: { data } }: AjaxResponse) => ({
-          type: TODO_GET_SUCCESS,
-          payload: data.repository.issues.edges,
-        })),
+        map(({ response: { data } }: AjaxResponse) =>
+          successRequestTodo(data.repository.issues),
+        ),
       );
     }),
   );
@@ -81,27 +105,13 @@ const initialState: TodoState = {
 //reducer
 export const todoReducer = handleActions(
   {
-    [TODO_GET_SUCCESS]: (state: TodoState, action: any): TodoState => {
-      const newTodoList: Array<Todo> = action.payload.map(
-        ({ node }: Github_Node<Github_Issue>) => {
-          const labelList =
-            node?.labels?.edges?.map(
-              ({ node }: Github_Node<Label>): Label => ({ ...node }),
-            ) ?? [];
-
-          return {
-            title: node.title,
-            body: node.bodyHTML,
-            id: node.id,
-            modified: false,
-            labelList,
-          };
-        },
-      );
-
+    [TODO_SET]: (
+      state: TodoState,
+      { payload }: Action<TODO_LIST>,
+    ): TodoState => {
       return {
         ...state,
-        todoItems: newTodoList,
+        todoItems: payload,
       };
     },
     [TODO_ADD]: (state: TodoState, action: any): TodoState => {

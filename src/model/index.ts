@@ -7,7 +7,7 @@ export type TODO_ID = string;
 
 export interface Label {
   id: LABEL_ID;
-  title: string;
+  name: string;
   color: string;
 }
 
