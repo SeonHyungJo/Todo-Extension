@@ -7,7 +7,7 @@ export type TODO_ID = string;
 
 export interface Label {
   id: LABEL_ID;
-  title: string;
+  name: string;
   color: string;
 }
 
@@ -24,4 +24,22 @@ export interface Config {
   owner: string;
   repoName: string;
   repoId: REPOSITORY_ID;
+}
+
+export type GET_CONFIG = Omit<Config, 'token' | 'repoId'>;
+
+// ===== GITHUB MODEL =====
+export interface Github_Edges<T> {
+  edges: Array<Github_Node<T>>;
+}
+
+export interface Github_Node<T> {
+  node: T;
+}
+
+export interface Github_Issue {
+  id: string;
+  title: string;
+  bodyHTML: string;
+  labels: Github_Edges<Label>;
 }
