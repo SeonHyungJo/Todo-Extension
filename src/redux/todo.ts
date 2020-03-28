@@ -148,7 +148,6 @@ export const todoReducer = handleActions(
       };
     },
     [TODO_ADD]: (state: ITodoState, { payload }: any): ITodoState => {
-      console.log('fsadjfopasdjfopasdjfopasdjpf', state, payload);
       const addedTodoList = [...state.todoItems, payload.issue];
       setItem(TODO_KEY, addedTodoList, false);
 

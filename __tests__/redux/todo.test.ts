@@ -122,7 +122,6 @@ test('Add Todo Items Testing', () => {
     labelList: [],
   };
 
-  console.log(todoReducer);
   // when
   const resultValue = todoReducer(prevState, {
     type: TODO_ADD,
