@@ -31,8 +31,7 @@ export const TODO_GET = 'todo/GET';
 export const TODO_SET = 'todo/GET/SUCCESS';
 
 export const TODO_ADD = 'todo/ADD';
-export const TODO_ADD_FAIL = 'todo/TODO_ADD_FAIL';
-export const TODO_ADD_ASYNC = 'auth/TODO_LOGIN_ASYNC';
+export const TODO_ADD_ASYNC = 'todo/ADD_ASYNC';
 
 export const TODO_DONE = 'todo/DONE';
 export const TODO_UPDATE = 'todo/UPDATE';
@@ -70,11 +69,13 @@ export const successRequestTodo = createAction(
 
 export const addTodo = createAction(
   TODO_ADD_ASYNC,
-  ({ title, body, labelList }: Todo) => ({
-    title,
-    body,
-    labelList,
-  }),
+  ({ title, body, labelList }: Todo) => {
+    return {
+      title,
+      body,
+      labelList,
+    };
+  },
 );
 export const doneTodo = createAction(TODO_DONE);
 export const updateTodo = createAction(TODO_UPDATE);
@@ -148,9 +149,8 @@ export const todoReducer = handleActions(
       };
     },
     [TODO_ADD]: (state: ITodoState, { payload }: any): ITodoState => {
-      const addedTodoList = [...state.todoItems, payload.issue];
+      const addedTodoList = [...state.todoItems, payload];
       setItem(TODO_KEY, addedTodoList, false);
-
       return {
         ...state,
         todoItems: addedTodoList,

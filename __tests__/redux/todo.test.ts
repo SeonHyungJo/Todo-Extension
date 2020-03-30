@@ -2,7 +2,7 @@ import {
   todoReducer,
   ITodoState,
   successRequestTodo,
-  TODO_ADD,
+  addTodo,
 } from '@/redux/todo';
 import { Github_Edges, Github_Issue, Todo } from '@/model';
 
@@ -123,13 +123,12 @@ test('Add Todo Items Testing', () => {
   };
 
   // when
-  const resultValue = todoReducer(prevState, {
-    type: TODO_ADD,
-  }); // done
-  // const expectValue = {
-  //   ...userLogin,
-  //   repoID: '',
-  // };
+  const resultValue = todoReducer(prevState, addTodo(addTodoParams));
 
-  // expect(expectValue).toStrictEqual(resultValue);
+  const expectValue = {
+    todoItems: [],
+    label: [],
+  };
+
+  expect(expectValue).toStrictEqual(resultValue);
 });
