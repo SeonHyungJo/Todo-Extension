@@ -16,15 +16,13 @@ import {
 import { ActionInterface } from '@/redux';
 import { request } from './common';
 import { getIssueQuery, createIssueQuery } from '@/githubApi/issue';
-import { getItem, setItem } from '@/utils/localStorage';
+import { setItem } from '@/utils/localStorage';
 
 // payload interface
 export interface ITodoState {
   todoItems: TODO_LIST;
   label: LABEL_LIST;
 }
-
-export interface ITodoAddParam {}
 
 // type
 export const TODO_GET = 'todo/GET';
@@ -111,7 +109,10 @@ const addTodoEpic: Epic<ActionInterface> = (
       return request(createIssueQuery(respositoryID, action.payload)).pipe(
         map(({ response: { data } }: AjaxResponse) => ({
           type: TODO_ADD,
-          payload: data,
+          payload: {
+            ...action.payload,
+            id: data.createIssue.issue.id,
+          },
         })),
       );
     }),
@@ -135,7 +136,7 @@ const initialState: ITodoState = {
 };
 
 //reducer
-export const todoReducer = handleActions(
+export const todoReducer = handleActions<ITodoState, any>(
   {
     [TODO_SET]: (
       state: ITodoState,
@@ -148,15 +149,19 @@ export const todoReducer = handleActions(
         todoItems: payload,
       };
     },
-    [TODO_ADD]: (state: ITodoState, { payload }: any): ITodoState => {
-      const addedTodoList = [...state.todoItems, payload];
+    [TODO_ADD]: (state: ITodoState, action: Action<Todo>): ITodoState => {
+      const addedTodoList: TODO_LIST = [...state.todoItems, action.payload];
       setItem(TODO_KEY, addedTodoList, false);
+
       return {
         ...state,
         todoItems: addedTodoList,
       };
     },
-    [TODO_UPDATE]: (state: ITodoState, { payload }: any): ITodoState => {
+    [TODO_UPDATE]: (
+      state: ITodoState,
+      { payload }: Action<Todo>,
+    ): ITodoState => {
       const targetId = payload.id;
       const newTodo = state.todoItems.map(item =>
         item.id === targetId ? payload : item,
@@ -168,7 +173,7 @@ export const todoReducer = handleActions(
     },
     [TODO_DELETE]: (
       state: ITodoState,
-      { payload: { id } }: any,
+      { payload: { id } }: Action<Todo>,
     ): ITodoState => {
       const newTodo = state.todoItems.filter(item => item.id !== id);
       return {

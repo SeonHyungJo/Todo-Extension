@@ -119,14 +119,18 @@ test('Add Todo Items Testing', () => {
   const addTodoParams: Todo = {
     title: 'test-github-api',
     body: 'Testing github api',
+    id: 'testid',
     labelList: [],
   };
 
   // when
-  const resultValue = todoReducer(prevState, addTodo(addTodoParams));
+  const resultValue = todoReducer(prevState, {
+    type: 'todo/ADD',
+    payload: addTodoParams,
+  });
 
-  const expectValue = {
-    todoItems: [],
+  const expectValue: ITodoState = {
+    todoItems: [addTodoParams],
     label: [],
   };
 
