@@ -17,6 +17,7 @@ import { ActionInterface } from '@/redux';
 import { request } from './common';
 import { getIssueQuery, createIssueQuery } from '@/githubApi/issue';
 import { setItem } from '@/utils/localStorage';
+import { getLabelQuery } from '@/githubApi/label';
 
 // payload interface
 export interface ITodoState {
@@ -36,6 +37,7 @@ export const TODO_UPDATE = 'todo/UPDATE';
 export const TODO_DELETE = 'todo/DELETE';
 
 export const LABEL_GET = 'label/GET';
+export const LABEL_SET = 'label/SET';
 
 export const TODO_FAIL = 'todo/GET/FAIL';
 
@@ -127,6 +129,33 @@ const addTodoEpic: Epic<ActionInterface> = (
 
 // TODO feature: 투두 추가|수정|Close|삭제 이후 서버의 데이터와 일치하는지 확인하는 기능
 
+const getLabelEpic: Epic<ActionInterface> = (
+  action$: Observable<ActionInterface>,
+  state$: StateObservable<any>,
+) => {
+  return action$.pipe(
+    ofType<ActionInterface>(LABEL_GET),
+    mergeMap(() =>
+      request(getLabelQuery(state$.value.auth)).pipe(
+        map(({ response: { data } }: AjaxResponse) => {
+          const labelList: LABEL_LIST = data.repository.labels.edges.map(
+            ({ node }: Github_Node<Label>) => ({
+              id: node.id,
+              name: node.name,
+              color: node.color,
+            }),
+          );
+
+          return {
+            type: LABEL_SET,
+            payload: labelList,
+          };
+        }),
+      ),
+    ),
+  );
+};
+
 // initialState
 const TODO_KEY = 'todo';
 const LABEL_KEY = 'label';
@@ -181,8 +210,19 @@ export const todoReducer = handleActions<ITodoState, any>(
         todoItems: [...newTodo],
       };
     },
+    [LABEL_SET]: (
+      state: TodoState,
+      { payload }: Action<LABEL_LIST>,
+    ): TodoState => {
+      setItem(LABEL_KEY, payload, false);
+
+      return {
+        ...state,
+        label: payload,
+      };
+    },
   },
   initialState,
 );
 
-export const todoEpic = combineEpics(getTodoEpic, addTodoEpic);
+export const todoEpic = combineEpics(getTodoEpic, getLabelEpic, addTodoEpic);
