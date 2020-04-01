@@ -10,7 +10,12 @@ export const createIssueQuery = (
 
   return `
   mutation {
-    createIssue(input: {repositoryId: "${repositoryId}", title: "${title}", body: "${body}", labelIds: "${labelIds}}) {
+    createIssue(input: {
+      repositoryId: "${repositoryId}",
+      title: "${title}",
+      body: "${body}",
+      labelIds: ${JSON.stringify(labelIds)}
+    }) {
       issue {
         id
       }
@@ -22,7 +27,7 @@ export const createIssueQuery = (
 export const getIssueQuery = ({ owner, repoName }: Config): string => `
   query {
     repository(name: "${repoName}", owner: "${owner}") {
-      issues(first: 10, states: OPEN) {
+      issues(first: 20, states: OPEN) {
         edges {
           node {
             id

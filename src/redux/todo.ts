@@ -15,11 +15,11 @@ import {
 } from '@/model';
 import { ActionInterface } from '@/redux';
 import { request } from './common';
-import { getIssueQuery } from '@/githubApi/issue';
+import { getIssueQuery, createIssueQuery } from '@/githubApi/issue';
 import { setItem } from '@/utils/localStorage';
 
 // payload interface
-export interface TodoState {
+export interface ITodoState {
   todoItems: TODO_LIST;
   label: LABEL_LIST;
 }
@@ -29,6 +29,8 @@ export const TODO_GET = 'todo/GET';
 export const TODO_SET = 'todo/GET/SUCCESS';
 
 export const TODO_ADD = 'todo/ADD';
+export const TODO_ADD_ASYNC = 'todo/ADD_ASYNC';
+
 export const TODO_DONE = 'todo/DONE';
 export const TODO_UPDATE = 'todo/UPDATE';
 export const TODO_DELETE = 'todo/DELETE';
@@ -63,7 +65,16 @@ export const successRequestTodo = createAction(
   },
 );
 
-export const addTodo = createAction(TODO_ADD);
+export const addTodo = createAction(
+  TODO_ADD_ASYNC,
+  ({ title, body, labelList }: Todo) => {
+    return {
+      title,
+      body,
+      labelList,
+    };
+  },
+);
 export const doneTodo = createAction(TODO_DONE);
 export const updateTodo = createAction(TODO_UPDATE);
 export const delTodo = createAction(TODO_DELETE);
@@ -87,7 +98,26 @@ const getTodoEpic: Epic<ActionInterface> = (
   );
 };
 
-// TODO feature: 투두 추가
+const addTodoEpic: Epic<ActionInterface> = (
+  action$: Observable<ActionInterface>,
+  state$: StateObservable<any>,
+) => {
+  return action$.pipe(
+    ofType<ActionInterface>(TODO_ADD_ASYNC),
+    mergeMap((action: ActionInterface) => {
+      const respositoryID = state$.value.auth && state$.value.auth.repoID;
+      return request(createIssueQuery(respositoryID, action.payload)).pipe(
+        map(({ response: { data } }: AjaxResponse) => ({
+          type: TODO_ADD,
+          payload: {
+            ...action.payload,
+            id: data.createIssue.issue.id,
+          },
+        })),
+      );
+    }),
+  );
+};
 
 // TODO feature: 투두 내용|제목|라벨 수정
 
@@ -100,18 +130,18 @@ const getTodoEpic: Epic<ActionInterface> = (
 // initialState
 const TODO_KEY = 'todo';
 const LABEL_KEY = 'label';
-const initialState: TodoState = {
+const initialState: ITodoState = {
   todoItems: [],
   label: [],
 };
 
 //reducer
-export const todoReducer = handleActions(
+export const todoReducer = handleActions<ITodoState, any>(
   {
     [TODO_SET]: (
-      state: TodoState,
+      state: ITodoState,
       { payload }: Action<TODO_LIST>,
-    ): TodoState => {
+    ): ITodoState => {
       setItem(TODO_KEY, payload, false);
 
       return {
@@ -119,13 +149,19 @@ export const todoReducer = handleActions(
         todoItems: payload,
       };
     },
-    [TODO_ADD]: (state: TodoState, action: any): TodoState => {
+    [TODO_ADD]: (state: ITodoState, action: Action<Todo>): ITodoState => {
+      const addedTodoList: TODO_LIST = [...state.todoItems, action.payload];
+      setItem(TODO_KEY, addedTodoList, false);
+
       return {
         ...state,
-        todoItems: [...state.todoItems, action.payload],
+        todoItems: addedTodoList,
       };
     },
-    [TODO_UPDATE]: (state: TodoState, { payload }: any): TodoState => {
+    [TODO_UPDATE]: (
+      state: ITodoState,
+      { payload }: Action<Todo>,
+    ): ITodoState => {
       const targetId = payload.id;
       const newTodo = state.todoItems.map(item =>
         item.id === targetId ? payload : item,
@@ -135,7 +171,10 @@ export const todoReducer = handleActions(
         todoItems: [...newTodo],
       };
     },
-    [TODO_DELETE]: (state: TodoState, { payload: { id } }: any): TodoState => {
+    [TODO_DELETE]: (
+      state: ITodoState,
+      { payload: { id } }: Action<Todo>,
+    ): ITodoState => {
       const newTodo = state.todoItems.filter(item => item.id !== id);
       return {
         ...state,
@@ -146,4 +185,4 @@ export const todoReducer = handleActions(
   initialState,
 );
 
-export const todoEpic = combineEpics(getTodoEpic);
+export const todoEpic = combineEpics(getTodoEpic, addTodoEpic);
