@@ -136,3 +136,60 @@ test('Add Todo Items Testing', () => {
 
   expect(expectValue).toStrictEqual(resultValue);
 });
+
+test('Delete Todo Items Testing', () => {
+  // given
+  const prevState = {
+    todoItems: [
+      {
+        title: 'test2',
+        body: '<p>test2</p>',
+        id: 'MDU6SXNzdWU1NTA3NDM3NDQ=',
+        modified: false,
+        labelList: [],
+      },
+      {
+        title: 'test',
+        body: '',
+        id: 'MDU6SXNzdWU1NTExMjkzNTQ=',
+        modified: false,
+        labelList: [
+          { id: 'MDU6TGFiZWwxNzkxMDk1NzIy', name: 'bug', color: 'd73a4a' },
+          {
+            id: 'MDU6TGFiZWwxNzkxMDk1NzIz',
+            name: 'documentation',
+            color: '0075ca',
+          },
+          {
+            id: 'MDU6TGFiZWwxNzkxMDk1NzI0',
+            name: 'duplicate',
+            color: 'cfd3d7',
+          },
+          {
+            id: 'MDU6TGFiZWwxNzkxMDk1NzI1',
+            name: 'enhancement',
+            color: 'a2eeef',
+          },
+        ],
+      },
+    ],
+    label: [],
+  };
+
+  const issueIdForDelete: string = 'MDU6SXNzdWU1NTA3NDM3NDQ=';
+
+  // when
+  const resultValue = todoReducer(prevState, {
+    type: 'todo/DELETE',
+    payload: {
+      id: issueIdForDelete,
+    },
+  });
+
+  const expectValue: ITodoState = {
+    todoItems: prevState.todoItems.filter(item => item.id !== issueIdForDelete),
+    label: [],
+  };
+
+  expect(expectValue).toStrictEqual(resultValue);
+});

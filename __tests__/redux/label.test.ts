@@ -1,4 +1,4 @@
-import { todoReducer, TodoState, LABEL_SET } from '@/redux/todo';
+import { todoReducer, ITodoState, LABEL_SET } from '@/redux/todo';
 import { LABEL_LIST } from '@/model';
 
 const newLabels: LABEL_LIST = [
@@ -35,7 +35,7 @@ test('Get Labels Testing', () => {
   });
 
   // done
-  const expectValue: TodoState = {
+  const expectValue: ITodoState = {
     todoItems: [],
     label: newLabels,
   };
