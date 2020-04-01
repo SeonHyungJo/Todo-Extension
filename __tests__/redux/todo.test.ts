@@ -1,5 +1,10 @@
-import { todoReducer, TodoState, successRequestTodo } from '@/redux/todo';
-import { Github_Edges, Github_Issue } from '@/model';
+import {
+  todoReducer,
+  ITodoState,
+  successRequestTodo,
+  addTodo,
+} from '@/redux/todo';
+import { Github_Edges, Github_Issue, Todo } from '@/model';
 
 const newIssue: Github_Edges<Github_Issue> = {
   edges: [
@@ -64,7 +69,7 @@ test('Get Todo Items Testing', () => {
   const resultValue = todoReducer(prevState, successRequestTodo(newIssue));
 
   // done
-  const expectValue: TodoState = {
+  const expectValue: ITodoState = {
     todoItems: [
       {
         title: 'test2',
@@ -98,6 +103,34 @@ test('Get Todo Items Testing', () => {
         ],
       },
     ],
+    label: [],
+  };
+
+  expect(expectValue).toStrictEqual(resultValue);
+});
+
+test('Add Todo Items Testing', () => {
+  // given
+  const prevState = {
+    todoItems: [],
+    label: [],
+  };
+
+  const addTodoParams: Todo = {
+    title: 'test-github-api',
+    body: 'Testing github api',
+    id: 'testid',
+    labelList: [],
+  };
+
+  // when
+  const resultValue = todoReducer(prevState, {
+    type: 'todo/ADD',
+    payload: addTodoParams,
+  });
+
+  const expectValue: ITodoState = {
+    todoItems: [addTodoParams],
     label: [],
   };
 
