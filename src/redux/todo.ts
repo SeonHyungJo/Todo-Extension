@@ -211,9 +211,9 @@ export const todoReducer = handleActions<ITodoState, any>(
       };
     },
     [LABEL_SET]: (
-      state: TodoState,
+      state: ITodoState,
       { payload }: Action<LABEL_LIST>,
-    ): TodoState => {
+    ): ITodoState => {
       setItem(LABEL_KEY, payload, false);
 
       return {
