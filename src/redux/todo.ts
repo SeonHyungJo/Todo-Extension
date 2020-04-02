@@ -15,7 +15,11 @@ import {
 } from '@/model';
 import { ActionInterface } from '@/redux';
 import { request } from './common';
-import { getIssueQuery, createIssueQuery } from '@/githubApi/issue';
+import {
+  getIssueQuery,
+  createIssueQuery,
+  updateIssueQuery,
+} from '@/githubApi/issue';
 import { setItem } from '@/utils/localStorage';
 import { getLabelQuery } from '@/githubApi/label';
 
@@ -33,7 +37,10 @@ export const TODO_ADD = 'todo/ADD';
 export const TODO_ADD_ASYNC = 'todo/ADD_ASYNC';
 
 export const TODO_DONE = 'todo/DONE';
+
 export const TODO_UPDATE = 'todo/UPDATE';
+export const TODO_UPDATE_ASYNC = 'todo/UPDATE_ASYNC';
+
 export const TODO_DELETE = 'todo/DELETE';
 
 export const LABEL_GET = 'label/GET';
@@ -78,7 +85,18 @@ export const addTodo = createAction(
   },
 );
 export const doneTodo = createAction(TODO_DONE);
-export const updateTodo = createAction(TODO_UPDATE);
+
+export const updateTodo = createAction(
+  TODO_UPDATE_ASYNC,
+  ({ id, title, body }: Todo) => {
+    return {
+      id,
+      title,
+      body,
+    };
+  },
+);
+
 export const delTodo = createAction(TODO_DELETE);
 
 export const getLabel = createAction(LABEL_GET);
@@ -121,7 +139,30 @@ const addTodoEpic: Epic<ActionInterface> = (
   );
 };
 
-// TODO feature: 투두 내용|제목|라벨 수정
+const updateTodoEpic: Epic<ActionInterface> = (
+  action$: Observable<ActionInterface>,
+  state$: StateObservable<any>,
+) => {
+  return action$.pipe(
+    ofType<ActionInterface>(TODO_UPDATE_ASYNC),
+    mergeMap((action: ActionInterface) => {
+      console.log('aaa', action);
+      return request(updateIssueQuery(action.payload)).pipe(
+        map(({ response }: AjaxResponse) => {
+          const { data } = response;
+          console.log(response);
+          return {
+            type: TODO_UPDATE,
+            payload: {
+              ...action.payload,
+              id: data.updateIssue.issue.id,
+            },
+          };
+        }),
+      );
+    }),
+  );
+};
 
 // TODO feature: 투두 Close
 
@@ -192,12 +233,14 @@ export const todoReducer = handleActions<ITodoState, any>(
       { payload }: Action<Todo>,
     ): ITodoState => {
       const targetId = payload.id;
-      const newTodo = state.todoItems.map(item =>
+      const updatedTodoList = state.todoItems.map(item =>
         item.id === targetId ? payload : item,
       );
+      setItem(TODO_KEY, updatedTodoList, false);
+
       return {
         ...state,
-        todoItems: [...newTodo],
+        todoItems: [...updatedTodoList],
       };
     },
     [TODO_DELETE]: (
@@ -225,4 +268,9 @@ export const todoReducer = handleActions<ITodoState, any>(
   initialState,
 );
 
-export const todoEpic = combineEpics(getTodoEpic, getLabelEpic, addTodoEpic);
+export const todoEpic = combineEpics(
+  getTodoEpic,
+  getLabelEpic,
+  addTodoEpic,
+  updateTodoEpic,
+);
