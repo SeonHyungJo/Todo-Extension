@@ -261,7 +261,7 @@ export const todoReducer = handleActions<ITodoState, any>(
     ): ITodoState => {
       const targetId = payload.id;
       const updatedTodoList = state.todoItems.map(item =>
-        item.id === targetId ? payload : item,
+        item.id === targetId ? { ...payload, modified: false } : item,
       );
       setItem(TODO_KEY, updatedTodoList, false);
 
