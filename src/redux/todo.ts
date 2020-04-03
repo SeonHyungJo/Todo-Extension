@@ -15,7 +15,11 @@ import {
 } from '@/model';
 import { ActionInterface } from '@/redux';
 import { request } from './common';
-import { getIssueQuery, createIssueQuery } from '@/githubApi/issue';
+import {
+  getIssueQuery,
+  createIssueQuery,
+  deleteIssueQuery,
+} from '@/githubApi/issue';
 import { setItem } from '@/utils/localStorage';
 import { getLabelQuery } from '@/githubApi/label';
 
@@ -34,7 +38,9 @@ export const TODO_ADD_ASYNC = 'todo/ADD_ASYNC';
 
 export const TODO_DONE = 'todo/DONE';
 export const TODO_UPDATE = 'todo/UPDATE';
+
 export const TODO_DELETE = 'todo/DELETE';
+export const TODO_DELETE_ASYNC = 'todo/DELETE_ASYNC';
 
 export const LABEL_GET = 'label/GET';
 export const LABEL_SET = 'label/SET';
@@ -79,7 +85,10 @@ export const addTodo = createAction(
 );
 export const doneTodo = createAction(TODO_DONE);
 export const updateTodo = createAction(TODO_UPDATE);
-export const delTodo = createAction(TODO_DELETE);
+
+export const deleteTodo = createAction(TODO_DELETE_ASYNC, (id: string) => {
+  return { id };
+});
 
 export const getLabel = createAction(LABEL_GET);
 
@@ -107,7 +116,7 @@ const addTodoEpic: Epic<ActionInterface> = (
   return action$.pipe(
     ofType<ActionInterface>(TODO_ADD_ASYNC),
     mergeMap((action: ActionInterface) => {
-      const respositoryID = state$.value.auth && state$.value.auth.repoID;
+      const respositoryID = state$.value?.auth.repoID;
       return request(createIssueQuery(respositoryID, action.payload)).pipe(
         map(({ response: { data } }: AjaxResponse) => ({
           type: TODO_ADD,
@@ -126,6 +135,27 @@ const addTodoEpic: Epic<ActionInterface> = (
 // TODO feature: 투두 Close
 
 // TODO feature: 투두 삭제
+const deleteTodoEpic: Epic<ActionInterface> = (
+  action$: Observable<ActionInterface>,
+  state$: StateObservable<any>,
+) => {
+  return action$.pipe(
+    ofType<ActionInterface>(TODO_DELETE_ASYNC),
+    mergeMap((action: ActionInterface) => {
+      console.log(action);
+      const issueID = action.payload && action.payload.id;
+      return request(deleteIssueQuery(issueID)).pipe(
+        map(({ response: { data } }: AjaxResponse) => ({
+          type: TODO_DELETE,
+          payload: {
+            ...action.payload,
+            id: data.closeIssue.issue.id,
+          },
+        })),
+      );
+    }),
+  );
+};
 
 // TODO feature: 투두 추가|수정|Close|삭제 이후 서버의 데이터와 일치하는지 확인하는 기능
 
@@ -184,7 +214,7 @@ export const todoReducer = handleActions<ITodoState, any>(
 
       return {
         ...state,
-        todoItems: addedTodoList,
+        todoItems: [...addedTodoList],
       };
     },
     [TODO_UPDATE]: (
@@ -204,10 +234,13 @@ export const todoReducer = handleActions<ITodoState, any>(
       state: ITodoState,
       { payload: { id } }: Action<Todo>,
     ): ITodoState => {
-      const newTodo = state.todoItems.filter(item => item.id !== id);
+      console.log(id);
+      const newTodoItems = state.todoItems.filter(item => item.id !== id);
+      setItem(TODO_KEY, newTodoItems, false);
+
       return {
         ...state,
-        todoItems: [...newTodo],
+        todoItems: [...newTodoItems],
       };
     },
     [LABEL_SET]: (
@@ -225,4 +258,9 @@ export const todoReducer = handleActions<ITodoState, any>(
   initialState,
 );
 
-export const todoEpic = combineEpics(getTodoEpic, getLabelEpic, addTodoEpic);
+export const todoEpic = combineEpics(
+  getTodoEpic,
+  getLabelEpic,
+  addTodoEpic,
+  deleteTodoEpic,
+);
