@@ -4,6 +4,10 @@ import { Epic, ofType, combineEpics, StateObservable } from 'redux-observable';
 import { mergeMap, map } from 'rxjs/operators';
 import { AjaxResponse } from 'rxjs/ajax';
 
+import { ActionInterface } from '@/redux';
+import { request } from '@/redux/common';
+import { setItem, getItem } from '@/utils/localStorage';
+import { getLabelQuery } from '@/githubApi/label';
 import {
   TODO_LIST,
   LABEL_LIST,
@@ -13,16 +17,12 @@ import {
   Github_Node,
   Github_Edges,
 } from '@/model';
-import { ActionInterface } from '@/redux';
-import { request } from './common';
 import {
   getIssueQuery,
   createIssueQuery,
   updateIssueQuery,
   deleteIssueQuery,
 } from '@/githubApi/issue';
-import { setItem } from '@/utils/localStorage';
-import { getLabelQuery } from '@/githubApi/label';
 
 // payload interface
 export interface ITodoState {
@@ -45,8 +45,8 @@ export const TODO_UPDATE_ASYNC = 'todo/UPDATE_ASYNC';
 export const TODO_DELETE = 'todo/DELETE';
 export const TODO_DELETE_ASYNC = 'todo/DELETE_ASYNC';
 
-export const LABEL_GET = 'label/GET';
 export const LABEL_SET = 'label/SET';
+export const LABEL_GET = 'label/GET';
 
 export const TODO_FAIL = 'todo/GET/FAIL';
 
@@ -89,13 +89,11 @@ export const addTodo = createAction(
 
 export const updateTodo = createAction(
   TODO_UPDATE_ASYNC,
-  ({ id, title, body }: Todo) => {
-    return {
-      id,
-      title,
-      body,
-    };
-  },
+  ({ id, title, body }: Todo) => ({
+    id,
+    title,
+    body,
+  }),
 );
 
 export const deleteTodo = createAction(TODO_DELETE_ASYNC, (id: string) => {
@@ -148,28 +146,19 @@ const updateTodoEpic: Epic<ActionInterface> = (
 ) => {
   return action$.pipe(
     ofType<ActionInterface>(TODO_UPDATE_ASYNC),
-    mergeMap((action: ActionInterface) => {
-      console.log('aaa', action);
-      return request(updateIssueQuery(action.payload)).pipe(
-        map(({ response }: AjaxResponse) => {
-          const { data } = response;
-          console.log(response);
-          return {
-            type: TODO_UPDATE,
-            payload: {
-              ...action.payload,
-              id: data.updateIssue.issue.id,
-            },
-          };
-        }),
-      );
-    }),
+    mergeMap((action: ActionInterface) =>
+      request(updateIssueQuery(action.payload)).pipe(
+        map(({ response: { data } }: AjaxResponse) => ({
+          type: TODO_UPDATE,
+          payload: {
+            ...data.updateIssue.issue,
+          },
+        })),
+      ),
+    ),
   );
 };
 
-// TODO feature: 투두 Close
-
-// TODO feature: 투두 삭제
 const deleteTodoEpic: Epic<ActionInterface> = (
   action$: Observable<ActionInterface>,
   state$: StateObservable<any>,
@@ -177,7 +166,6 @@ const deleteTodoEpic: Epic<ActionInterface> = (
   return action$.pipe(
     ofType<ActionInterface>(TODO_DELETE_ASYNC),
     mergeMap((action: ActionInterface) => {
-      console.log(action);
       const issueID = action.payload && action.payload.id;
       return request(deleteIssueQuery(issueID)).pipe(
         map(({ response: { data } }: AjaxResponse) => ({
@@ -192,7 +180,7 @@ const deleteTodoEpic: Epic<ActionInterface> = (
   );
 };
 
-// TODO feature: 투두 추가|수정|Close|삭제 이후 서버의 데이터와 일치하는지 확인하는 기능
+// TODO feature: 투두 추가|수정|삭제 이후 서버의 데이터와 일치하는지 확인하는 기능
 
 const getLabelEpic: Epic<ActionInterface> = (
   action$: Observable<ActionInterface>,
@@ -224,9 +212,24 @@ const getLabelEpic: Epic<ActionInterface> = (
 // initialState
 const TODO_KEY = 'todo';
 const LABEL_KEY = 'label';
+const defaultTodoList: TODO_LIST = [];
+const defaultLabelList: LABEL_LIST = [];
+
+const initialTodoListState: TODO_LIST = getItem(
+  TODO_KEY,
+  defaultTodoList,
+  false,
+);
+
+const initialLabelListState: LABEL_LIST = getItem(
+  TODO_KEY,
+  defaultLabelList,
+  false,
+);
+
 const initialState: ITodoState = {
-  todoItems: [],
-  label: [],
+  todoItems: initialTodoListState,
+  label: initialLabelListState,
 };
 
 //reducer
@@ -271,7 +274,6 @@ export const todoReducer = handleActions<ITodoState, any>(
       state: ITodoState,
       { payload: { id } }: Action<Todo>,
     ): ITodoState => {
-      console.log(id);
       const newTodoItems = state.todoItems.filter(item => item.id !== id);
       setItem(TODO_KEY, newTodoItems, false);
 
