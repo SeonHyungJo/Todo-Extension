@@ -1,9 +1,4 @@
-import {
-  todoReducer,
-  ITodoState,
-  successRequestTodo,
-  addTodo,
-} from '@/redux/todo';
+import { todoReducer, ITodoState, successRequestTodo } from '@/redux/todo';
 import { Github_Edges, Github_Issue, Todo } from '@/model';
 
 const newIssue: Github_Edges<Github_Issue> = {
@@ -131,6 +126,52 @@ test('Add Todo Items Testing', () => {
 
   const expectValue: ITodoState = {
     todoItems: [addTodoParams],
+    label: [],
+  };
+
+  expect(expectValue).toStrictEqual(resultValue);
+});
+
+test('Update Todo Items Testing', () => {
+  // given
+  const prevState = {
+    todoItems: [
+      {
+        title: 'test2',
+        body: '<p>test2</p>',
+        id: 'MDU6SXNzdWU1NTA3NDM3NDQ=',
+        modified: false,
+        labelList: [],
+      },
+    ],
+    label: [],
+  };
+
+  const updateTodoState: Todo = {
+    id: 'MDU6SXNzdWU1NTA3NDM3NDQ=',
+    title: 'test3',
+    body: '<p>test2</p>',
+    labelList: [],
+  };
+
+  // when
+  const resultValue = todoReducer(prevState, {
+    type: 'todo/UPDATE',
+    payload: {
+      ...updateTodoState,
+    },
+  });
+
+  const expectValue: ITodoState = {
+    todoItems: [
+      {
+        id: 'MDU6SXNzdWU1NTA3NDM3NDQ=',
+        title: 'test3',
+        body: '<p>test2</p>',
+        modified: false,
+        labelList: [],
+      },
+    ],
     label: [],
   };
 

@@ -49,17 +49,23 @@ export const getIssueQuery = ({ owner, repoName }: Config): string => `
   }
 `;
 
-export const updateIssueQuery = (
-  repoId: REPOSITORY_ID,
-  { title, body }: Todo,
-): string => `
+export const updateIssueQuery = ({ id, title, body }: Todo): string => `
   mutation {
-    updateIssue(input: {id: "${repoId}", body: "${body}", title: "${title}}) {
+    updateIssue(input: {id: "${id}", body: "${body}", title: "${title}"}) {
       issue {
         updatedAt
         title
         id
         bodyHTML
+        labels(first: 10) {
+          edges {
+            node {
+              id
+              name
+              color
+            }
+          }
+        }
       }
     }
   }
