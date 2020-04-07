@@ -70,14 +70,14 @@ test('Get Todo Items Testing', () => {
         title: 'test2',
         body: '<p>test2</p>',
         id: 'MDU6SXNzdWU1NTA3NDM3NDQ=',
-        modified: false,
+        status: 'normal',
         labelList: [],
       },
       {
         title: 'test',
         body: '',
         id: 'MDU6SXNzdWU1NTExMjkzNTQ=',
-        modified: false,
+        status: 'normal',
         labelList: [
           { id: 'MDU6TGFiZWwxNzkxMDk1NzIy', name: 'bug', color: 'd73a4a' },
           {
@@ -140,7 +140,7 @@ test('Update Todo Items Testing', () => {
         title: 'test2',
         body: '<p>test2</p>',
         id: 'MDU6SXNzdWU1NTA3NDM3NDQ=',
-        modified: false,
+        status: 'normal',
         labelList: [],
       },
     ],
@@ -168,7 +168,7 @@ test('Update Todo Items Testing', () => {
         id: 'MDU6SXNzdWU1NTA3NDM3NDQ=',
         title: 'test3',
         body: '<p>test2</p>',
-        modified: false,
+        status: 'normal',
         labelList: [],
       },
     ],
@@ -186,14 +186,14 @@ test('Delete Todo Items Testing', () => {
         title: 'test2',
         body: '<p>test2</p>',
         id: 'MDU6SXNzdWU1NTA3NDM3NDQ=',
-        modified: false,
+        status: 'normal',
         labelList: [],
       },
       {
         title: 'test',
         body: '',
         id: 'MDU6SXNzdWU1NTExMjkzNTQ=',
-        modified: false,
+        status: 'normal',
         labelList: [
           { id: 'MDU6TGFiZWwxNzkxMDk1NzIy', name: 'bug', color: 'd73a4a' },
           {

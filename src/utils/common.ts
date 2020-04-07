@@ -5,3 +5,12 @@ export const getLabels = (labels: Github_Edges<Label>): LABEL_LIST => {
     ...node,
   }));
 };
+
+export const createUniqueId = () => {
+  return (
+    '_' +
+    Math.random()
+      .toString(36)
+      .substr(2, 9)
+  );
+};

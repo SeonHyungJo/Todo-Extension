@@ -15,7 +15,7 @@ export interface Todo {
   title: string;
   body: string;
   id?: TODO_ID;
-  modified?: boolean;
+  status?: string; // created, updated, deleted, normal
   labelList?: LABEL_LIST;
 }
 
