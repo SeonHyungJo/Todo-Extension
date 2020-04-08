@@ -1,13 +1,7 @@
-import { Observable, of } from 'rxjs';
 import { createAction, handleActions, Action } from 'redux-actions';
-import { Epic, ofType, combineEpics, StateObservable } from 'redux-observable';
-import { mergeMap, map, catchError, delay } from 'rxjs/operators';
-import { AjaxResponse } from 'rxjs/ajax';
 
-import { ActionInterface } from '@/redux';
-import { request } from '@/redux/common';
 import { setItem, getItem } from '@/utils/localStorage';
-import { getLabelQuery } from '@/githubApi/label';
+import { createUniqueId } from '@/utils/common';
 import {
   TODO_LIST,
   LABEL_LIST,
@@ -16,20 +10,19 @@ import {
   Github_Issue,
   Github_Node,
   Github_Edges,
+  TODO_ID,
 } from '@/model';
-import {
-  getIssueQuery,
-  createIssueQuery,
-  updateIssueQuery,
-  deleteIssueQuery,
-} from '@/githubApi/issue';
-import { createUniqueId } from '@/utils/common';
 
 // payload interface
 export interface ITodoState {
   todoItems: TODO_LIST;
   label: LABEL_LIST;
 }
+
+const STATUS_CREATE = 'created';
+const STATUS_MODIFY = 'modify';
+const STATUS_DELETE = 'delete';
+const STATUS_NORMAL = 'normal';
 
 // type
 export const BATCH = 'todo/BATCH';
@@ -40,8 +33,6 @@ export const TODO_ITEM_SET = 'todo/ITEM/SET';
 
 export const TODO_ADD = 'todo/ADD';
 export const TODO_ADD_BATCH = 'todo/ADD/BATCH';
-
-export const TODO_DONE = 'todo/DONE';
 
 export const TODO_UPDATE = 'todo/UPDATE';
 export const TODO_UPDATE_ASYNC = 'todo/UPDATE_ASYNC';
@@ -70,7 +61,7 @@ export const successRequestTodo = createAction(
           title: node.title,
           body: node.bodyHTML,
           id: node.id,
-          status: 'normal',
+          status: STATUS_NORMAL,
           labelList,
         };
       },
@@ -88,7 +79,7 @@ export const addTodo = createAction(
       title,
       body,
       labelList,
-      status: 'created',
+      status: STATUS_CREATE,
     };
   },
 );
@@ -102,152 +93,10 @@ export const updateTodo = createAction(
   }),
 );
 
-export const deleteTodo = createAction(TODO_DELETE_ASYNC, (id: string) => {
-  return { id };
-});
-
+export const deleteTodo = createAction(TODO_DELETE_ASYNC, (id: TODO_ID) => ({
+  id,
+}));
 export const getLabel = createAction(LABEL_GET);
-
-// epic
-const getTodoEpic: Epic<ActionInterface> = (
-  action$: Observable<ActionInterface>,
-  state$: StateObservable<any>,
-) => {
-  return action$.pipe(
-    ofType<ActionInterface>(TODO_GET),
-    mergeMap(() => {
-      return request(getIssueQuery(state$.value.auth)).pipe(
-        map(({ response: { data } }: AjaxResponse) =>
-          successRequestTodo(data.repository.issues),
-        ),
-      );
-    }),
-  );
-};
-
-const addTodoEpic: Epic<ActionInterface> = (
-  action$: Observable<ActionInterface>,
-  state$: StateObservable<any>,
-) => {
-  return action$.pipe(
-    ofType<ActionInterface>(TODO_ADD, TODO_ADD_BATCH),
-    mergeMap(({ payload }: ActionInterface) => {
-      const respositoryID = state$.value?.auth.repoID;
-      return request(createIssueQuery(respositoryID, payload)).pipe(
-        map(({ response: { data } }: AjaxResponse) => {
-          of({ type: TODO_ITEM_SET }, { type: TODO_SET });
-          return {
-            type: TODO_ITEM_SET,
-            payload: {
-              targetId: payload.id,
-              todoItem: {
-                id: data.createIssue.issue.id,
-                title: payload.title,
-                body: payload.body,
-                labelList: payload.labelList,
-                status: 'normal',
-              },
-            },
-          };
-        }),
-        catchError(() =>
-          of({
-            type: BATCH,
-            payload: {
-              type: TODO_ADD,
-              payload,
-            },
-            error: true,
-          }),
-        ),
-      );
-    }),
-  );
-};
-
-const updateTodoEpic: Epic<ActionInterface> = (
-  action$: Observable<ActionInterface>,
-  state$: StateObservable<any>,
-) => {
-  return action$.pipe(
-    ofType<ActionInterface>(TODO_UPDATE_ASYNC),
-    mergeMap((action: ActionInterface) =>
-      request(updateIssueQuery(action.payload)).pipe(
-        map(({ response: { data } }: AjaxResponse) => ({
-          type: TODO_UPDATE,
-          payload: {
-            ...data.updateIssue.issue,
-          },
-        })),
-      ),
-    ),
-  );
-};
-
-const deleteTodoEpic: Epic<ActionInterface> = (
-  action$: Observable<ActionInterface>,
-  state$: StateObservable<any>,
-) => {
-  return action$.pipe(
-    ofType<ActionInterface>(TODO_DELETE_ASYNC),
-    mergeMap((action: ActionInterface) => {
-      const issueID = action.payload && action.payload.id;
-      return request(deleteIssueQuery(issueID)).pipe(
-        map(({ response: { data } }: AjaxResponse) => ({
-          type: TODO_DELETE,
-          payload: {
-            ...action.payload,
-            id: data.closeIssue.issue.id,
-          },
-        })),
-      );
-    }),
-  );
-};
-
-// TODO feature: 투두 추가|수정|삭제 이후 서버의 데이터와 일치하는지 확인하는 기능
-
-const getLabelEpic: Epic<ActionInterface> = (
-  action$: Observable<ActionInterface>,
-  state$: StateObservable<any>,
-) => {
-  return action$.pipe(
-    ofType<ActionInterface>(LABEL_GET),
-    mergeMap(() =>
-      request(getLabelQuery(state$.value.auth)).pipe(
-        map(({ response: { data } }: AjaxResponse) => {
-          const labelList: LABEL_LIST = data.repository.labels.edges.map(
-            ({ node }: Github_Node<Label>) => ({
-              id: node.id,
-              name: node.name,
-              color: node.color,
-            }),
-          );
-
-          return {
-            type: LABEL_SET,
-            payload: labelList,
-          };
-        }),
-      ),
-    ),
-  );
-};
-
-const batchEpic: Epic<ActionInterface> = (
-  action$: Observable<ActionInterface>,
-) => {
-  return action$.pipe(
-    ofType<ActionInterface>(BATCH),
-    delay(4000),
-    map(({ payload }: ActionInterface) => {
-      return {
-        ...payload,
-        type: payload.type + '/BATCH',
-      };
-    }),
-  );
-};
 
 // initialState
 const TODO_KEY = 'todo';
@@ -292,7 +141,7 @@ export const todoReducer = handleActions<ITodoState, any>(
     ): ITodoState => {
       const todoItems = state.todoItems.map(item =>
         item.id === payload.targetId
-          ? { ...payload.todoItem, status: 'normal' }
+          ? { ...payload.todoItem, status: STATUS_NORMAL }
           : item,
       );
       setItem(TODO_KEY, todoItems, false);
@@ -351,13 +200,4 @@ export const todoReducer = handleActions<ITodoState, any>(
     },
   },
   initialState,
-);
-
-export const todoEpic = combineEpics(
-  getTodoEpic,
-  getLabelEpic,
-  addTodoEpic,
-  updateTodoEpic,
-  deleteTodoEpic,
-  batchEpic,
 );

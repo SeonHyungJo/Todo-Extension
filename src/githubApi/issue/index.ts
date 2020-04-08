@@ -17,7 +17,19 @@ export const createIssueQuery = (
       labelIds: ${JSON.stringify(labelIds)}
     }) {
       issue {
+        updatedAt
         id
+        title
+        bodyHTML
+        labels(first: 10) {
+          edges {
+            node {
+              id
+              name
+              color
+            }
+          }
+        }
       }
     }
   }
