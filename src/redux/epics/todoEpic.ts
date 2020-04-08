@@ -1,11 +1,11 @@
 import { Observable, of } from 'rxjs';
-import { Epic, ofType, StateObservable } from 'redux-observable';
-import { mergeMap, map, catchError, delay } from 'rxjs/operators';
+import { Epic, ofType, StateObservable, combineEpics } from 'redux-observable';
+import { mergeMap, map, catchError, delay, debounceTime } from 'rxjs/operators';
 import { AjaxResponse } from 'rxjs/ajax';
 
 import { ActionInterface } from '@/redux';
 import { request } from '@/redux/common';
-import { getLabels } from '@/utils/common';
+import { getLabels, getIssues } from '@/utils/common';
 import { TODO_ID } from '@/model';
 import {
   getIssueQuery,
@@ -14,16 +14,18 @@ import {
   deleteIssueQuery,
 } from '@/githubApi/issue';
 import {
-  TODO_ADD_BATCH,
-  TODO_ITEM_SET,
   BATCH,
   TODO_GET,
+  TODO_SET,
+  TODO_ITEM_SET,
+  TODO_ADD,
   TODO_UPDATE,
   TODO_DELETE,
-  TODO_DELETE_ASYNC,
-  successRequestTodo,
-  TODO_ADD,
-  TODO_UPDATE_ASYNC,
+  TODO_ADD_BATCH,
+  TODO_UPDATE_BATCH,
+  TODO_DELETE_BATCH,
+  TODO_SYNC,
+  TODO_GET_BATCH,
 } from '@/redux/todo';
 
 const fetchCreateFulfilled = (
@@ -62,23 +64,25 @@ const catchErrorToBatch = (type: string, payload: any) => {
   };
 };
 
-export const getTodoEpic: Epic<ActionInterface> = (
+const getTodoEpic: Epic<ActionInterface> = (
   action$: Observable<ActionInterface>,
   state$: StateObservable<any>,
 ) => {
   return action$.pipe(
-    ofType<ActionInterface>(TODO_GET),
+    ofType<ActionInterface>(TODO_GET, TODO_GET_BATCH),
     mergeMap(() => {
       return request(getIssueQuery(state$.value.auth)).pipe(
-        map(({ response: { data } }: AjaxResponse) =>
-          successRequestTodo(data.repository.issues),
-        ),
+        map(({ response: { data } }: AjaxResponse) => ({
+          type: TODO_SET,
+          payload: getIssues(data.repository.issues),
+        })),
+        catchError(() => of(catchErrorToBatch(TODO_GET, {}))),
       );
     }),
   );
 };
 
-export const addTodoEpic: Epic<ActionInterface> = (
+const addTodoEpic: Epic<ActionInterface> = (
   action$: Observable<ActionInterface>,
   state$: StateObservable<any>,
 ) => {
@@ -97,49 +101,65 @@ export const addTodoEpic: Epic<ActionInterface> = (
   );
 };
 
-export const updateTodoEpic: Epic<ActionInterface> = (
+const updateTodoEpic: Epic<ActionInterface> = (
   action$: Observable<ActionInterface>,
   state$: StateObservable<any>,
 ) => {
   return action$.pipe(
-    ofType<ActionInterface>(TODO_UPDATE_ASYNC),
-    mergeMap((action: ActionInterface) =>
-      request(updateIssueQuery(action.payload)).pipe(
+    ofType<ActionInterface>(TODO_UPDATE, TODO_UPDATE_BATCH),
+    mergeMap(({ payload }: ActionInterface) =>
+      request(updateIssueQuery(payload)).pipe(
         map(({ response: { data } }: AjaxResponse) => ({
-          type: TODO_UPDATE,
+          type: TODO_SYNC,
           payload: {
             ...data.updateIssue.issue,
           },
         })),
+        catchError(() => of(catchErrorToBatch(TODO_UPDATE, payload))),
       ),
     ),
   );
 };
 
-export const deleteTodoEpic: Epic<ActionInterface> = (
+const deleteTodoEpic: Epic<ActionInterface> = (
   action$: Observable<ActionInterface>,
   state$: StateObservable<any>,
 ) => {
   return action$.pipe(
-    ofType<ActionInterface>(TODO_DELETE_ASYNC),
-    mergeMap((action: ActionInterface) => {
-      const issueID = action.payload && action.payload.id;
+    ofType<ActionInterface>(TODO_DELETE, TODO_DELETE_BATCH),
+    mergeMap(({ payload }: ActionInterface) => {
+      const issueID = payload && payload.id;
+
       return request(deleteIssueQuery(issueID)).pipe(
         map(({ response: { data } }: AjaxResponse) => ({
-          type: TODO_DELETE,
+          type: TODO_SYNC,
           payload: {
-            ...action.payload,
+            ...payload,
             id: data.closeIssue.issue.id,
           },
         })),
+        catchError(() => of(catchErrorToBatch(TODO_DELETE, payload))),
       );
     }),
   );
 };
 
-// TODO feature: 투두 추가|수정|삭제 이후 서버의 데이터와 일치하는지 확인하는 기능
+const syncEpic: Epic<ActionInterface> = (
+  action$: Observable<ActionInterface>,
+) => {
+  return action$.pipe(
+    ofType<ActionInterface>(TODO_SYNC),
+    debounceTime(3000),
+    map(({ payload }: ActionInterface) => {
+      return {
+        type: 'TEST',
+        payload,
+      };
+    }),
+  );
+};
 
-export const batchEpic: Epic<ActionInterface> = (
+const batchEpic: Epic<ActionInterface> = (
   action$: Observable<ActionInterface>,
 ) => {
   return action$.pipe(
@@ -153,3 +173,12 @@ export const batchEpic: Epic<ActionInterface> = (
     }),
   );
 };
+
+export default combineEpics(
+  getTodoEpic,
+  addTodoEpic,
+  updateTodoEpic,
+  deleteTodoEpic,
+  batchEpic,
+  syncEpic,
+);

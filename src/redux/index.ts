@@ -4,7 +4,7 @@ import logger from 'redux-logger';
 
 import { authReducer, authEpic } from '@/redux/auth';
 import { todoReducer } from '@/redux/todo';
-import * as EPICS from '@/redux/epics';
+import EPICS from '@/redux/epics';
 
 export interface ActionInterface {
   type: string;

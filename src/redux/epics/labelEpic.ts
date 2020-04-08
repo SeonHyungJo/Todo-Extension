@@ -5,11 +5,11 @@ import { AjaxResponse } from 'rxjs/ajax';
 
 import { ActionInterface } from '@/redux';
 import { request } from '@/redux/common';
+import { LABEL_GET, LABEL_SET } from '@/redux/todo';
 import { LABEL_LIST, Label, Github_Node } from '@/model';
 import { getLabelQuery } from '@/githubApi/label';
-import { LABEL_GET, LABEL_SET } from '@/redux/todo';
 
-export const getLabelEpic: Epic<ActionInterface> = (
+const getLabelEpic: Epic<ActionInterface> = (
   action$: Observable<ActionInterface>,
   state$: StateObservable<any>,
 ) => {
@@ -35,3 +35,5 @@ export const getLabelEpic: Epic<ActionInterface> = (
     ),
   );
 };
+
+export default getLabelEpic;

@@ -12,11 +12,12 @@ export interface Label {
 }
 
 export interface Todo {
+  updatedAt?: string; // ISO-8601 encoded UTC date string.
+  id?: TODO_ID;
   title: string;
   body: string;
-  id?: TODO_ID;
   status?: string; // created, updated, deleted, normal
-  labelList?: LABEL_LIST;
+  labels?: LABEL_LIST;
 }
 
 export interface Config {
@@ -38,6 +39,7 @@ export interface Github_Node<T> {
 }
 
 export interface Github_Issue {
+  updatedAt: string;
   id: string;
   title: string;
   bodyHTML: string;

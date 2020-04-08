@@ -1,5 +1,5 @@
 import { combineEpics } from 'redux-observable';
-import * as LABEL_EPICS from '@/redux/epics/labelEpic';
-import * as TODO_EPICS from '@/redux/epics/todoEpic';
+import TODO_EPICS from '@/redux/epics/todoEpic';
+import LABEL_EPICS from '@/redux/epics/labelEpic';
 
-export default combineEpics({ LABEL_EPICS, TODO_EPICS });
+export default combineEpics(TODO_EPICS, LABEL_EPICS);

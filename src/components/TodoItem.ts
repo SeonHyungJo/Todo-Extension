@@ -1,4 +1,4 @@
-import LabelItem from './LabelItem';
+import LabelItem from '@/components/LabelItem';
 
 class TodoItem {
   $todoItem: HTMLElement;

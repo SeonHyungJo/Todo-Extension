@@ -1,17 +1,8 @@
 import { createAction, handleActions, Action } from 'redux-actions';
 
+import { TODO_LIST, LABEL_LIST, Todo, TODO_ID } from '@/model';
 import { setItem, getItem } from '@/utils/localStorage';
 import { createUniqueId } from '@/utils/common';
-import {
-  TODO_LIST,
-  LABEL_LIST,
-  Todo,
-  Label,
-  Github_Issue,
-  Github_Node,
-  Github_Edges,
-  TODO_ID,
-} from '@/model';
 
 // payload interface
 export interface ITodoState {
@@ -19,83 +10,78 @@ export interface ITodoState {
   label: LABEL_LIST;
 }
 
-const STATUS_CREATE = 'created';
-const STATUS_MODIFY = 'modify';
-const STATUS_DELETE = 'delete';
-const STATUS_NORMAL = 'normal';
+export const STATUS_CREATE = 'created';
+export const STATUS_UPDATE = 'updated';
+export const STATUS_DELETE = 'deleted';
+export const STATUS_NORMAL = 'normal';
 
 // type
 export const BATCH = 'todo/BATCH';
 
-export const TODO_GET = 'todo/GET';
-export const TODO_SET = 'todo/GET/SUCCESS';
+export const TODO_SET = 'todo/SET';
 export const TODO_ITEM_SET = 'todo/ITEM/SET';
+
+export const TODO_GET = 'todo/GET';
+export const TODO_GET_BATCH = 'todo/GET/BATCH';
 
 export const TODO_ADD = 'todo/ADD';
 export const TODO_ADD_BATCH = 'todo/ADD/BATCH';
 
 export const TODO_UPDATE = 'todo/UPDATE';
-export const TODO_UPDATE_ASYNC = 'todo/UPDATE_ASYNC';
+export const TODO_UPDATE_BATCH = 'todo/UPDATE/BATCH';
 
 export const TODO_DELETE = 'todo/DELETE';
-export const TODO_DELETE_ASYNC = 'todo/DELETE_ASYNC';
+export const TODO_DELETE_BATCH = 'todo/DELETE/BATCH';
+
+export const TODO_SYNC = 'todo/SYNC';
 
 export const LABEL_SET = 'label/SET';
 export const LABEL_GET = 'label/GET';
 
-export const TODO_FAIL = 'todo/GET/FAIL';
-
 // action
 export const getTodo = createAction(TODO_GET);
-export const successRequestTodo = createAction(
-  TODO_SET,
-  ({ edges }: Github_Edges<Github_Issue>) => {
-    const todoList: Array<Todo> = edges.map(
-      ({ node }: Github_Node<Github_Issue>) => {
-        const labelList =
-          node?.labels?.edges?.map(
-            ({ node }: Github_Node<Label>): Label => ({ ...node }),
-          ) ?? [];
-
-        return {
-          title: node.title,
-          body: node.bodyHTML,
-          id: node.id,
-          status: STATUS_NORMAL,
-          labelList,
-        };
-      },
-    );
-
-    return todoList;
-  },
-);
-
 export const addTodo = createAction(
   TODO_ADD,
-  ({ title, body, labelList = [] }: Todo) => {
+  ({
+    title,
+    body,
+    labels = [],
+    updatedAt = new Date().toISOString(),
+  }: Todo) => {
     return {
+      updatedAt,
       id: createUniqueId(),
       title,
       body,
-      labelList,
+      labels,
       status: STATUS_CREATE,
     };
   },
 );
 
 export const updateTodo = createAction(
-  TODO_UPDATE_ASYNC,
-  ({ id, title, body }: Todo) => ({
+  TODO_UPDATE,
+  ({
     id,
     title,
     body,
+    labels = [],
+    updatedAt = new Date().toISOString(),
+  }: Todo) => ({
+    updatedAt,
+    id,
+    title,
+    body,
+    labels,
+    status: STATUS_UPDATE,
   }),
 );
 
-export const deleteTodo = createAction(TODO_DELETE_ASYNC, (id: TODO_ID) => ({
+export const deleteTodo = createAction(TODO_DELETE, (id: TODO_ID) => ({
   id,
+  status: STATUS_DELETE,
 }));
+
 export const getLabel = createAction(LABEL_GET);
 
 // initialState
@@ -111,7 +97,7 @@ const initialTodoListState: TODO_LIST = getItem(
 );
 
 const initialLabelListState: LABEL_LIST = getItem(
-  TODO_KEY,
+  LABEL_KEY,
   defaultLabelList,
   false,
 );
