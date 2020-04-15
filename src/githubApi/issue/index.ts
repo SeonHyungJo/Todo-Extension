@@ -2,9 +2,9 @@ import { REPOSITORY_ID, TODO_ID, Config, Todo } from '@/model';
 
 export const createIssueQuery = (
   repositoryId: REPOSITORY_ID,
-  { title, body, labelList = [] }: Todo,
+  { title, body, labels = [] }: Todo,
 ): string => {
-  const labelIds = labelList.map(item => {
+  const labelIds = labels.map(item => {
     return item.id;
   });
 
@@ -17,7 +17,19 @@ export const createIssueQuery = (
       labelIds: ${JSON.stringify(labelIds)}
     }) {
       issue {
+        updatedAt
         id
+        title
+        bodyHTML
+        labels(first: 10) {
+          edges {
+            node {
+              id
+              name
+              color
+            }
+          }
+        }
       }
     }
   }
@@ -30,6 +42,7 @@ export const getIssueQuery = ({ owner, repoName }: Config): string => `
       issues(first: 20, states: OPEN) {
         edges {
           node {
+            updatedAt
             id
             title
             bodyHTML
