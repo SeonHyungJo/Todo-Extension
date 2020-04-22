@@ -10,17 +10,15 @@ label {
   margin: 15px 0px 5px;
 }
 
-input[type="text"] {
+input[type='text'] {
   border: 1px solid black;
 }
 
 #app {
   width: 100%;
   height: 100%;
-
+  border: 1px solid black;
   display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .config {
@@ -28,6 +26,7 @@ input[type="text"] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  flex: 1;
 }
 
 .config__top {
@@ -48,4 +47,72 @@ input[type="text"] {
   border-radius: 15px;
 
   cursor: pointer;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.main__top {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.main__top__todo-container {
+  margin: 10px 5px;
+}
+
+.main__top__todo-container input {
+  width: 98.5%;
+  height: 25px;
+}
+
+.main__content__todo-container {
+  margin: 10px 5px;
+}
+
+.todo-item {
+  border: 1px solid black;
+  margin-bottom: 10px;
+  cursor: pointer;
+  height: auto;
+}
+
+.todo-item__form {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+.todo-item__form__done-box {
+  flex: 0.05;
+}
+
+.todo-item__form__title {
+  flex: 0.9;
+  text-align: center;
+}
+
+.item__form__delete-btn {
+  flex: 0.05;
+  text-align: center;
+}
+
+.todo-item__form_close {
+  display: none;
+}
+
+.todo-item__form_open {
+  display: flex;
+  flex: 1;
+}
+
+.todo-item__form__contents {
+  flex: 0.98;
+  padding-top: 10px;
+  margin-bottom: 10px;
 }
