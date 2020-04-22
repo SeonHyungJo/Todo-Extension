@@ -1,3 +1,5 @@
+import { userLogin } from '@/redux/auth';
+
 class Config {
   $configPage: HTMLElement;
   data: any; // Todo 정의 필요
@@ -26,7 +28,7 @@ class Config {
       <section class="config__top">
         <div class="config__top__owner-container">
           <label for="config__owner-input">Owner</label>
-          <input type="text" id="config__owner-input">
+          <input type="text" id="config__owner-input" autofocus>
         </div>
         <div class="config__top__repo-container">
           <label for="config__repo-input">Repo Name</label>
@@ -37,10 +39,31 @@ class Config {
           <input type="text" id="config__token-input">
         </div>
       </section>
+
       <section class="config__bottom">
         <button class="config__bottom__check-btn">Check</button>
       </section>
     `;
+
+    const checkBtn = document.getElementsByClassName(
+      'config__bottom__check-btn',
+    )[0];
+
+    checkBtn.addEventListener('click', () => {
+      const owner = (<HTMLInputElement>(
+        document.getElementById('config__owner-input')
+      )).value;
+      const repoName = (<HTMLInputElement>(
+        document.getElementById('config__repo-input')
+      )).value;
+      const token = (<HTMLInputElement>(
+        document.getElementById('config__token-input')
+      )).value;
+
+      if (owner && repoName && token) {
+        this.dispatch(userLogin({ owner, repoName, token }));
+      }
+    });
   }
 }
 
