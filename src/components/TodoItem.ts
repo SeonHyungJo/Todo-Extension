@@ -30,10 +30,26 @@ class TodoItem {
       </article>
     `;
 
-    const $label = new LabelItem(this.$todoItem, {
+    new LabelItem(this.$todoItem, {
       dispatch: this.dispatch,
     });
-    this.$label = $label;
+
+    const todoItem = document.getElementsByClassName(
+      'todo-item__form__title',
+    )[0];
+
+    todoItem.addEventListener('click', () => {
+      const content = <HTMLInputElement>(
+        document.getElementById('todo-item-content')
+      );
+      if (content.classList.contains('todo-item__form_close')) {
+        content.classList.remove('todo-item__form_close');
+        content.classList.add('todo-item__form_open');
+      } else {
+        content.classList.remove('todo-item__form_open');
+        content.classList.add('todo-item__form_close');
+      }
+    });
   }
 }
 
