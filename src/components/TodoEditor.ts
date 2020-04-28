@@ -17,10 +17,10 @@ class TodoEditor {
 
   render() {
     this.$todoEditor.innerHTML = /*html*/ `
-      <article class="todo-editor__collapse-form todo-editor__hidden">
+      <article class="todo-editor__collapse-form">
         <button class="todo-editor__collapse-form__write-btn"> 메모 작성.. </button>
       </article>
-      <article class="todo-editor__active">
+      <article class="todo-editor__active todo-editor__hidden">
         <div class="todo-editor__active-top-form">
           <input type="text" class="todo-editor__active-form__title-input" placeholder="Title"/>
           <button class="todo-editor__active__label-add-btn"> + </button>

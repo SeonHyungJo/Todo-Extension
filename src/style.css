@@ -60,6 +60,8 @@ textarea::placeholder {
   align-items: center;
   flex: 1;
 
+  padding: 10px;
+
   overflow-y: scroll;
 }
 
@@ -83,7 +85,8 @@ textarea::placeholder {
 
 .todo-editor-container {
   width: 100%;
-  padding: 10px;
+
+  padding-bottom: 10px;
 }
 
 .todo-editor {
@@ -151,16 +154,25 @@ textarea::placeholder {
   overflow-y: hidden;
 }
 
-.todo-item {
+.todo-items {
+  width: 100%;
   border: 1px solid black;
-  margin-bottom: 10px;
+
+  padding: 5px;
+  overflow-y: scroll;
+}
+
+.todo-item {
+  width: 100%;
+  border: 1px solid black;
+  padding: 3px 5px 1px;
+  margin-bottom: 5px;
+
   cursor: pointer;
-  height: auto;
 }
 
 .todo-item__form {
   display: flex;
-  height: 40px;
   align-items: center;
   justify-content: center;
 }
@@ -192,4 +204,47 @@ textarea::placeholder {
 .item__form__delete-btn {
   flex: 0.05;
   text-align: center;
+}
+
+.label-items {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.label-item {
+  position: relative;
+  width: 25px;
+  height: 14px;
+  margin: 0px 2px;
+
+  background: black;
+  color: white;
+  font-size: 8px;
+  text-align: center;
+  border: 0px;
+}
+
+.label-item:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 7px solid white;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+
+.label-item:before {
+  content: '';
+  position: absolute;
+  right: -7px;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 7px solid black;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
 }

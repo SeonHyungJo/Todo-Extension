@@ -87,6 +87,21 @@ class Main {
       data: this.data,
       dispatch: this.dispatch,
     });
+
+    new TodoItem(this.$todoItemContainer, {
+      data: this.data,
+      dispatch: this.dispatch,
+    });
+
+    new TodoItem(this.$todoItemContainer, {
+      data: this.data,
+      dispatch: this.dispatch,
+    });
+
+    new TodoItem(this.$todoItemContainer, {
+      data: this.data,
+      dispatch: this.dispatch,
+    });
   }
 }
 
