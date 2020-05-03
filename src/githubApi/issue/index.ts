@@ -4,7 +4,7 @@ export const createIssueQuery = (
   repositoryId: REPOSITORY_ID,
   { title, body, labels = [] }: Todo,
 ): string => {
-  const labelIds = labels.map(item => {
+  const labelIds = labels.map((item) => {
     return item.id;
   });
 

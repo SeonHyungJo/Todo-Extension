@@ -40,7 +40,10 @@ class TodoItem {
   render() {
     this.$todoItemTop.innerHTML = /*html*/ `
       <article class="todo-item__form">
-        <input type="checkbox" class="todo-item__form__done-box">
+        <div class="round">
+          <input type="checkbox" id="checkbox" class="todo-item__form__done-box">
+          <label for="checkbox"></label>
+        </div>
         <h1 class="todo-item__form__title">Title</h1>
         <button class="todo-item__form__delete-btn">X</button>
       </article>
@@ -49,9 +52,9 @@ class TodoItem {
       </article>
     `;
 
-    new LabelItem(this.$labelItems, {
-      dispatch: this.dispatch,
-    });
+    // new LabelItem(this.$labelItems, {
+    //   dispatch: this.dispatch,
+    // });
 
     // new LabelItem(this.$labelItems, {
     //   dispatch: this.dispatch,

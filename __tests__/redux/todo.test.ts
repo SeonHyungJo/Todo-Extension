@@ -228,7 +228,9 @@ test('Delete Todo Items Testing', () => {
   });
 
   const expectValue: ITodoState = {
-    todoItems: prevState.todoItems.filter(item => item.id !== issueIdForDelete),
+    todoItems: prevState.todoItems.filter(
+      (item) => item.id !== issueIdForDelete,
+    ),
     label: [],
   };
 

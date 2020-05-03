@@ -125,7 +125,7 @@ export const todoReducer = handleActions<ITodoState, any>(
       state: ITodoState,
       { payload }: Action<any>,
     ): ITodoState => {
-      const todoItems = state.todoItems.map(item =>
+      const todoItems = state.todoItems.map((item) =>
         item.id === payload.targetId
           ? { ...payload.todoItem, status: STATUS_NORMAL }
           : item,
@@ -151,7 +151,7 @@ export const todoReducer = handleActions<ITodoState, any>(
       { payload }: Action<Todo>,
     ): ITodoState => {
       const targetId = payload.id;
-      const updatedTodoList = state.todoItems.map(item =>
+      const updatedTodoList = state.todoItems.map((item) =>
         item.id === targetId ? { ...payload } : item,
       );
       setItem(TODO_KEY, updatedTodoList, false);
@@ -165,7 +165,7 @@ export const todoReducer = handleActions<ITodoState, any>(
       state: ITodoState,
       { payload: { id } }: Action<Todo>,
     ): ITodoState => {
-      const newTodoItems = state.todoItems.filter(item => item.id !== id);
+      const newTodoItems = state.todoItems.filter((item) => item.id !== id);
       setItem(TODO_KEY, newTodoItems, false);
 
       return {
