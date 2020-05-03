@@ -34,13 +34,9 @@ class App {
     store.subscribe(() => {
       const nextRootStore = store.getState();
 
-      if (this.rootStore.auth.repoID !== '' && this.currentPage !== MAIN_PAGE) {
+      if (this.rootStore.auth.repoID !== '') {
         this.currentPage = MAIN_PAGE;
-        this.$target.innerHTML = '';
-        this.$main = new Main(this.$target, {
-          data: nextRootStore.todo,
-          dispatch: store.dispatch,
-        });
+        this.$main?.setState(nextRootStore.todo);
       } else if (this.rootStore.auth.repoID === '') {
         this.currentPage = CONFIG_PAGE;
         this.$target.innerHTML = '';

@@ -1,5 +1,6 @@
 import TodoEditor from '@/components/TodoEditor';
 import TodoItem from '@/components/TodoItem';
+import { getTodo } from '@/redux/todo';
 
 class Main {
   $mainPage: HTMLElement;
@@ -29,6 +30,7 @@ class Main {
     this.data = props.data;
     this.dispatch = props.dispatch;
 
+    this.dispatch(getTodo());
     this.render();
   }
 
@@ -38,6 +40,9 @@ class Main {
   }
 
   render() {
+    console.log('this.data', this.data);
+    this.$todoEditor.innerHTML = '';
+    this.$todoItemContainer.innerHTML = '';
     // this.$mainPage.innerHTML = /*html*/ `
     //   <section class="main__top">
     //     <div class="main__top__todo-container">
@@ -62,46 +67,38 @@ class Main {
       data: this.data,
       dispatch: this.dispatch,
     });
-
     new TodoItem(this.$todoItemContainer, {
       data: this.data,
       dispatch: this.dispatch,
     });
-
-    new TodoItem(this.$todoItemContainer, {
-      data: this.data,
-      dispatch: this.dispatch,
-    });
-
-    new TodoItem(this.$todoItemContainer, {
-      data: this.data,
-      dispatch: this.dispatch,
-    });
-
-    new TodoItem(this.$todoItemContainer, {
-      data: this.data,
-      dispatch: this.dispatch,
-    });
-
-    new TodoItem(this.$todoItemContainer, {
-      data: this.data,
-      dispatch: this.dispatch,
-    });
-
-    new TodoItem(this.$todoItemContainer, {
-      data: this.data,
-      dispatch: this.dispatch,
-    });
-
-    new TodoItem(this.$todoItemContainer, {
-      data: this.data,
-      dispatch: this.dispatch,
-    });
-
-    new TodoItem(this.$todoItemContainer, {
-      data: this.data,
-      dispatch: this.dispatch,
-    });
+    // new TodoItem(this.$todoItemContainer, {
+    //   data: this.data,
+    //   dispatch: this.dispatch,
+    // });
+    // new TodoItem(this.$todoItemContainer, {
+    //   data: this.data,
+    //   dispatch: this.dispatch,
+    // });
+    // new TodoItem(this.$todoItemContainer, {
+    //   data: this.data,
+    //   dispatch: this.dispatch,
+    // });
+    // new TodoItem(this.$todoItemContainer, {
+    //   data: this.data,
+    //   dispatch: this.dispatch,
+    // });
+    // new TodoItem(this.$todoItemContainer, {
+    //   data: this.data,
+    //   dispatch: this.dispatch,
+    // });
+    // new TodoItem(this.$todoItemContainer, {
+    //   data: this.data,
+    //   dispatch: this.dispatch,
+    // });
+    // new TodoItem(this.$todoItemContainer, {
+    //   data: this.data,
+    //   dispatch: this.dispatch,
+    // });
   }
 }
 
