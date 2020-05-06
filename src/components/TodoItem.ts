@@ -47,8 +47,8 @@ class TodoItem {
     this.$todoItemTop.innerHTML = /*html*/ `
       <article class="todo-item__form" data-updated-at=${updatedAt} >
         <div class="round">
-          <input type="checkbox" id="checkbox" class="todo-item__form__done-box">
-          <label for="checkbox"></label>
+          <input type="checkbox" id="${id}_checkbox" class="todo-item__form__done-box">
+          <label for="${id}_checkbox"></label>
         </div>
         <h1 id=${id}_title class="todo-item__form__title">${title}</h1>
         <button class="todo-item__form__delete-btn">X</button>
