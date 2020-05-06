@@ -1,4 +1,5 @@
 import LabelItem from '@/components/LabelItem';
+import { Label } from '@/model';
 
 class TodoItem {
   $todoItem: HTMLElement;
@@ -38,36 +39,37 @@ class TodoItem {
   }
 
   render() {
+    const { updatedAt, body, id, labelList, title } = this.data;
+
+    this.$todoItem.dataset['id'] = id;
+    this.$todoItem.dataset['updateAt'] = updatedAt;
+
     this.$todoItemTop.innerHTML = /*html*/ `
-      <article class="todo-item__form">
+      <article class="todo-item__form" data-updated-at=${updatedAt} >
         <div class="round">
           <input type="checkbox" id="checkbox" class="todo-item__form__done-box">
           <label for="checkbox"></label>
         </div>
-        <h1 class="todo-item__form__title">Title</h1>
+        <h1 id=${id}_title class="todo-item__form__title">${title}</h1>
         <button class="todo-item__form__delete-btn">X</button>
       </article>
-      <article class="todo-item__form todo-item__form_close">
-        <textarea class="todo-item__form__contents" placeholder="Contents"></textarea>
+      <article id=${id}_body class="todo-item__form todo-item__form_close">
+        <textarea class="todo-item__form__contents" placeholder="Contents">${body}</textarea>
       </article>
     `;
 
-    // new LabelItem(this.$labelItems, {
-    //   dispatch: this.dispatch,
-    // });
+    labelList.map((label: Label) => {
+      new LabelItem(this.$labelItems, {
+        data: label,
+        dispatch: this.dispatch,
+      });
+    });
 
-    // new LabelItem(this.$labelItems, {
-    //   dispatch: this.dispatch,
-    // });
-
-    const todoItem = document.getElementsByClassName(
-      'todo-item__form__title',
-    )[0];
+    const todoItem = <HTMLElement>document.getElementById(`${id}_title`);
 
     todoItem.addEventListener('click', () => {
-      const content = <HTMLInputElement>(
-        document.getElementById('todo-item-content')
-      );
+      const content = <HTMLInputElement>document.getElementById(`${id}_body`);
+
       if (content.classList.contains('todo-item__form_close')) {
         content.classList.remove('todo-item__form_close');
         content.classList.add('todo-item__form_open');

@@ -1,6 +1,7 @@
 import TodoEditor from '@/components/TodoEditor';
 import TodoItem from '@/components/TodoItem';
 import { getTodo } from '@/redux/todo';
+import { Todo } from '@/model';
 
 class Main {
   $mainPage: HTMLElement;
@@ -67,38 +68,13 @@ class Main {
       data: this.data,
       dispatch: this.dispatch,
     });
-    new TodoItem(this.$todoItemContainer, {
-      data: this.data,
-      dispatch: this.dispatch,
+
+    this.data.todoItems.map((todo: Todo) => {
+      new TodoItem(this.$todoItemContainer, {
+        data: todo,
+        dispatch: this.dispatch,
+      });
     });
-    // new TodoItem(this.$todoItemContainer, {
-    //   data: this.data,
-    //   dispatch: this.dispatch,
-    // });
-    // new TodoItem(this.$todoItemContainer, {
-    //   data: this.data,
-    //   dispatch: this.dispatch,
-    // });
-    // new TodoItem(this.$todoItemContainer, {
-    //   data: this.data,
-    //   dispatch: this.dispatch,
-    // });
-    // new TodoItem(this.$todoItemContainer, {
-    //   data: this.data,
-    //   dispatch: this.dispatch,
-    // });
-    // new TodoItem(this.$todoItemContainer, {
-    //   data: this.data,
-    //   dispatch: this.dispatch,
-    // });
-    // new TodoItem(this.$todoItemContainer, {
-    //   data: this.data,
-    //   dispatch: this.dispatch,
-    // });
-    // new TodoItem(this.$todoItemContainer, {
-    //   data: this.data,
-    //   dispatch: this.dispatch,
-    // });
   }
 }
 
