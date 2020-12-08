@@ -1,8 +1,18 @@
+:root {
+  --main-box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.3);
+  --sub-box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
 body {
   width: 300px;
   height: 400px;
 
-  font-size: 16px;
+  font-size: 18px;
 }
 
 label {
@@ -10,17 +20,16 @@ label {
   margin: 15px 0px 5px;
 }
 
-input[type="text"] {
-  border: 1px solid black;
+textarea::placeholder {
+  text-align: center;
+  vertical-align: center;
 }
 
 #app {
   width: 100%;
   height: 100%;
-
+  border: 1px solid black;
   display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .config {
@@ -28,6 +37,7 @@ input[type="text"] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  flex: 1;
 }
 
 .config__top {
@@ -48,4 +58,269 @@ input[type="text"] {
   border-radius: 15px;
 
   cursor: pointer;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+
+  padding: 7px;
+
+  overflow-y: scroll;
+}
+
+.main__top {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.main__top__todo-container {
+  margin: 10px 5px;
+}
+
+.main__top__todo-container input {
+  width: 98.5%;
+  height: 25px;
+}
+
+.main__content__todo-container {
+  margin: 10px 5px;
+}
+
+.todo-editor-container {
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.todo-editor {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: var(--main-box-shadow);
+}
+
+.todo-editor__collapse-form__write-btn {
+  width: 100%;
+  border: 0px;
+
+  font-size: 15px;
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.todo-editor__hidden {
+  display: none;
+}
+
+.todo-editor__active {
+  width: 100%;
+}
+
+.todo-editor__active-top-form {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  padding: 3px;
+}
+
+.todo-editor__active-form__title-input {
+  border: 0px;
+
+  font-size: 22px;
+}
+
+.todo-editor__active__label-add-btn {
+  border: 0px;
+  cursor: pointer;
+}
+
+.todo-editor__active-bottom-form {
+  width: 100%;
+
+  padding: 3px;
+}
+
+.todo-editor__active__contents {
+  width: 100%;
+  height: 100%;
+  min-height: 50px;
+
+  padding: 0px;
+
+  border: 0px;
+
+  resize: none;
+  overflow-y: hidden;
+}
+
+.todo-items {
+  width: 100%;
+  height: 100%;
+
+  overflow-y: scroll;
+
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: var(--main-box-shadow);
+}
+
+.todo-item {
+  width: 100%;
+  padding: 3px 5px;
+
+  margin-bottom: 4px;
+  cursor: pointer;
+  box-shadow: var(--sub-box-shadow);
+}
+
+.todo-item:last-child {
+  margin-bottom: 0px;
+}
+
+.todo-item-top {
+  width: 100%;
+  height: 100%;
+}
+
+.todo-item__form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: ease 1s;
+}
+
+.round {
+  flex: 0.05;
+  position: relative;
+  top: -15px;
+}
+
+.round label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+
+  border: 1px solid #ccc;
+  border-radius: 50%;
+
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.round label:after {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  height: 4px;
+  width: 8px;
+
+  border: 2px solid #fff;
+  border-top: none;
+  border-right: none;
+
+  content: "";
+  opacity: 0;
+  transform: rotate(-45deg);
+}
+
+.round input[type="checkbox"] {
+  visibility: hidden;
+}
+
+.round input[type="checkbox"]:checked + label {
+  background-color: #66bb6a;
+  border-color: #66bb6a;
+}
+
+.round input[type="checkbox"]:checked + label:after {
+  opacity: 1;
+}
+
+.todo-item__form__title {
+  flex: 0.9;
+  text-align: center;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+}
+
+.todo-item__form_close {
+  display: none;
+}
+
+.todo-item__form_open {
+  display: flex;
+  flex: 0.5;
+}
+
+.todo-item__form__contents {
+  flex: 0.98;
+}
+
+.todo-item__form__delete-btn {
+  flex: 0.05;
+  text-align: center;
+
+  border: none;
+  line-height: 8px;
+  cursor: pointer;
+}
+
+.label-items {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.label-item {
+  position: relative;
+  width: 25px;
+  height: 14px;
+  margin: 0px 2px;
+
+  background: black;
+  color: white;
+  font-size: 8px;
+  text-align: center;
+  border: 0px;
+}
+
+.label-item:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 7px solid white;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+
+.label-item:before {
+  content: "";
+  position: absolute;
+  right: -7px;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 7px solid black;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
 }
